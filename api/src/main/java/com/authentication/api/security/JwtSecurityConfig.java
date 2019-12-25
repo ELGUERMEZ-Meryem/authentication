@@ -21,6 +21,8 @@ public class JwtSecurityConfig extends WebSecurityConfigurerAdapter {
         .authorizeRequests()
                 .antMatchers("/api/public/**").permitAll()
                 .anyRequest().authenticated()
+        .and()
+        .httpBasic()
         ;
     }
 }
