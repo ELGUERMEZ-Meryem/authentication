@@ -1,5 +1,6 @@
 package com.authentication.api.security;
 
+import com.authentication.api.entity.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -7,10 +8,7 @@ import java.util.Collection;
 import java.util.Date;
 
 public class AppUser implements UserDetails {
-
-    private String email;
-    private String password;
-    private Date createdAt;
+    User user = new User();
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -19,12 +17,12 @@ public class AppUser implements UserDetails {
 
     @Override
     public String getPassword() {
-        return this.password;
+        return this.user.getPassword();
     }
 
     @Override
     public String getUsername() {
-        return this.email;
+        return this.user.getEmail();
     }
 
     @Override
@@ -48,10 +46,10 @@ public class AppUser implements UserDetails {
     }
 
     public Date getCreatedAt() {
-        return createdAt;
+        return this.user.getCreatedAt();
     }
 
     public void setCreatedAt(Date createdAt) {
-        this.createdAt = createdAt;
+        this.user.setCreatedAt(createdAt);
     }
 }
