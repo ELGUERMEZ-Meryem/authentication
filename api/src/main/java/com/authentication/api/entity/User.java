@@ -14,6 +14,10 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 public class User {
+    public User(@NotBlank String email, @NotBlank String password) {
+        this.email = email;
+        this.password = password;
+    }
 
     @Id
     private Long id;

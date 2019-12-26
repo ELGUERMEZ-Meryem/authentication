@@ -1,14 +1,35 @@
 package com.authentication.api.controller;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import com.authentication.api.entity.User;
+import com.authentication.api.security.TokenUtil;
+import com.authentication.api.security.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/rest/hello")
+@RequestMapping("/api/public/")
 public class HelloController {
-    @GetMapping
-    public String hello(){
-        return "hello";
+
+    @Autowired
+    private TokenUtil tokenUtil;
+
+    @Autowired
+    private UserService userService;
+
+    @Autowired
+    private AuthenticationManager authenticationManager;
+
+    @PostMapping("/hey")
+    public String singIn(@RequestBody User user){
+        final Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(user.getEmail(), user.getPassword()));
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+        UserDetails userDetails = userService.loadUserByUsername(user.getEmail());
+        String token = tokenUtil.generateToken(userDetails);
+        return token;
     }
 }
