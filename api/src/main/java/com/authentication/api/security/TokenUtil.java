@@ -1,5 +1,6 @@
 package com.authentication.api.security;
 
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.beans.factory.annotation.Value;
@@ -30,7 +31,6 @@ public class TokenUtil {
         Map<String, Object> claims = new HashMap<>();
         claims.put(CLAIMS_SUBJECT, userDetails.getUsername());
         claims.put(CLAIMS_CREATE, new Date());
-        System.out.println("token secret"+ TOKEN_Secret);
         return Jwts.builder()
                 .setClaims(claims)
                 .setExpiration(generateExpirationDate())
@@ -38,7 +38,41 @@ public class TokenUtil {
                 .compact();
     }
 
+    public String getUserNameFromToken(String token) {
+        try {
+            Claims claims = Jwts.parser()
+                    .setSigningKey(TOKEN_Secret)
+                    .parseClaimsJws(token)
+                    .getBody();
+            return (String) claims.get(CLAIMS_SUBJECT);
+
+        } catch(Exception e){
+            return null;
+        }
+    }
+
     private Date generateExpirationDate() {
         return new Date(System.currentTimeMillis() + TOKEN_VALIDITY * 1000);
     }
+
+    public boolean isTokenValid(String token, UserDetails userDetails) {
+        String username = getUserNameFromToken(token);
+        return ((username.equals(userDetails.getUsername())) && !isTokenExpired(token));
+
+    }
+
+    private boolean isTokenExpired(String token) {
+        try {
+            Claims claims = Jwts.parser()
+                    .setSigningKey(TOKEN_Secret)
+                    .parseClaimsJws(token)
+                    .getBody();
+            Date expirationDate = claims.getExpiration();
+            return expirationDate.before(new Date());
+        }
+        catch (Exception e) {
+            return false;
+        }
+    }
+
 }

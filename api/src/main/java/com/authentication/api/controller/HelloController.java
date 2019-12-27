@@ -12,7 +12,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/public/")
+@RequestMapping("/api/public")
 public class HelloController {
 
     @Autowired
@@ -23,6 +23,12 @@ public class HelloController {
 
     @Autowired
     private AuthenticationManager authenticationManager;
+
+    @GetMapping("/g")
+    public String s(){
+
+        return "kkkkkkkkkkkkkkkkkkkkkkk";
+    }
 
     @PostMapping("/hey")
     public String singIn(@RequestBody User user){
