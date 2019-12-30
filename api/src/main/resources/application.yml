@@ -8,7 +8,7 @@ spring:
         properties:
             hibernate.dialect: org.hibernate.dialect.MySQL5InnoDBDialect
         hibernate:
-            ddl-auto: validate
+            ddl-auto: create
             naming.physical-strategy: org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy
 
 auth:

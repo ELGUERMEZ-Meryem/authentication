@@ -45,11 +45,5 @@ public class AppUser implements UserDetails {
         return true;
     }
 
-    public Date getCreatedAt() {
-        return this.user.getCreatedAt();
-    }
 
-    public void setCreatedAt(Date createdAt) {
-        this.user.setCreatedAt(createdAt);
-    }
 }

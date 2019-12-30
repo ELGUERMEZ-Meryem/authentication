@@ -7,13 +7,12 @@ import lombok.NoArgsConstructor;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.validation.constraints.NotBlank;
-import java.util.Date;
 
 @Entity
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class User {
+public class User extends AbstractEntity<String> {
     public User(@NotBlank String email, @NotBlank String password) {
         this.email = email;
         this.password = password;
@@ -28,5 +27,4 @@ public class User {
     @NotBlank
     private String password;
 
-    private Date createdAt;
 }
