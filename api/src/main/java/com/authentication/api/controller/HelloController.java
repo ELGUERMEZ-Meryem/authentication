@@ -1,6 +1,7 @@
 package com.authentication.api.controller;
 
 import com.authentication.api.entity.User;
+import com.authentication.api.repository.UserRepository;
 import com.authentication.api.security.TokenUtil;
 import com.authentication.api.security.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +25,9 @@ public class HelloController {
     @Autowired
     private AuthenticationManager authenticationManager;
 
+    @Autowired
+    private UserRepository userRepository;
+
     @GetMapping("/g")
     public String s(){
 
@@ -37,5 +41,10 @@ public class HelloController {
         UserDetails userDetails = userService.loadUserByUsername(user.getEmail());
         String token = tokenUtil.generateToken(userDetails);
         return token;
+    }
+    @PostMapping("/signUp")
+    public User singUp(@RequestBody User user){
+        user = userRepository.save(user);
+        return user;
     }
 }
