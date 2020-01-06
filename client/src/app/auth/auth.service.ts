@@ -11,14 +11,14 @@ export class AuthService {
 
   autoLogin(){
     const username = sessionStorage.getItem('username');
-    let expirationDate = new Date(sessionStorage.getItem('expirationDate'));
+    let expirationDate = new Date( +sessionStorage.getItem('expirationDate') * 1000);
     const token = sessionStorage.getItem('token');
     if(!username){
       return;
     }
-    // if(!expirationDate || expirationDate < new Date()) {
-    //   return;
-    // }
+    if(expirationDate < new Date()) {
+      return;
+    }
     this.user.next(username);
   }
 }

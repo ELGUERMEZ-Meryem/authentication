@@ -3,7 +3,6 @@ import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {HttpClient} from "@angular/common/http";
 import * as jwt_decode from 'jwt-decode';
 import {map} from "rxjs/operators";
-import {Subject} from "rxjs";
 import {AuthService} from "./auth.service";
 
 @Component({
@@ -47,6 +46,7 @@ export class AuthComponent implements OnInit {
     this.http.post(`http://localhost:8080/api/public/hey`, {email: this.f().email.value, password: this.f().password.value}, {responseType: 'text'}).pipe(
       map(
         userData => {
+          console.log("fffffffff ", userData)
           var claims : any = jwt_decode(userData);
           this.authService.user.next(claims.sub);
           sessionStorage.setItem('username', claims.sub);
@@ -58,6 +58,7 @@ export class AuthComponent implements OnInit {
       )
     ).subscribe( data => {
       this.token = data;
+      this.error = null;
       this.isLoading = false;
       this.loginForm.reset();
     }, err => {
@@ -70,6 +71,7 @@ export class AuthComponent implements OnInit {
         console.log('data ', data);
         this.token = data;
         this.isLoading = false;
+        this.error = null;
         this.loginForm.reset();
       }, err => {
         this.isLoading = false;
