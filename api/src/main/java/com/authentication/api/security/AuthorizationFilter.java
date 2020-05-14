@@ -16,7 +16,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-public class AuthFilter extends OncePerRequestFilter {
+public class AuthorizationFilter extends OncePerRequestFilter {
     private final SecurityConstants securityConstants;
 
     @Autowired
@@ -25,7 +25,7 @@ public class AuthFilter extends OncePerRequestFilter {
     @Autowired
     private UserService userService;
 
-    public AuthFilter(SecurityConstants securityConstants) {
+    public AuthorizationFilter(SecurityConstants securityConstants) {
         this.securityConstants = securityConstants;
     }
 
