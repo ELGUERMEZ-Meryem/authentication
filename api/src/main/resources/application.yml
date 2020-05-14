@@ -11,9 +11,10 @@ spring:
             ddl-auto: validate
             naming.physical-strategy: org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy
 
-auth:
+jwt:
+    auth_login_url: /auth/login
     expiration: 604800
     sub: sub
     create: created
-    secret: n2r5u8x/ADGKaPdSgVkYp3s6v9yBEH+MbQeThWmZq4t7wzCFJNcRn2r5u8x/ADGKaPdSgVkYp3s6v9yBEH+MbQeThWmZq4t7wzCFJNcRff
-    header: Authorization
+    token_secret: n2r5u8x/ADGKaPdSgVkYp3s6v9yBEH+MbQeThWmZq4t7wzCFJNcRn2r5u8x/ADGKaPdSgVkYp3s6v9yBEH+MbQeThWmZq4t7wzCFJNcRff
+    token_header: Authorization

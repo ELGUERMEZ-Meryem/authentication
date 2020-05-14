@@ -28,12 +28,6 @@ public class HelloController {
     @Autowired
     private UserRepository userRepository;
 
-    @GetMapping("/g")
-    public String s(){
-
-        return "kkkkkkkkkkkkkkkkkkkkkkk";
-    }
-
     @PostMapping("/hey")
     public String singIn(@RequestBody User user){
         final Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(user.getEmail(), user.getPassword()));

@@ -1,5 +1,6 @@
 package com.authentication.api.security;
 
+import com.authentication.api.constant.SecurityConstants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -16,9 +17,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 public class AuthFilter extends OncePerRequestFilter {
-
-    @Value("${auth.header}")
-    private String TOKEN_HEADER;
+    private final SecurityConstants securityConstants;
 
     @Autowired
     private TokenUtil tokenUtil;
@@ -26,9 +25,13 @@ public class AuthFilter extends OncePerRequestFilter {
     @Autowired
     private UserService userService;
 
+    public AuthFilter(SecurityConstants securityConstants) {
+        this.securityConstants = securityConstants;
+    }
+
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        final String header = request.getHeader(TOKEN_HEADER);
+        final String header = request.getHeader(securityConstants.getTokenHeader());
         final SecurityContext securityContext = SecurityContextHolder.getContext();
 
         if(header != null && securityContext.getAuthentication() == null){

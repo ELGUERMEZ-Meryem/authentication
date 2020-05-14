@@ -1,10 +1,10 @@
 package com.authentication.api.security;
 
+import com.authentication.api.constant.SecurityConstants;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -20,6 +20,11 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 @EnableWebSecurity
 @Configuration
 public class JwtSecurityConfig extends WebSecurityConfigurerAdapter {
+    private final SecurityConstants securityConstants;
+
+    public JwtSecurityConfig(SecurityConstants securityConstants) {
+        this.securityConstants = securityConstants;
+    }
 
     @Bean
     @Override
@@ -29,7 +34,7 @@ public class JwtSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Bean
      AuthFilter authFilter() {
-        return new AuthFilter();
+        return new AuthFilter(securityConstants);
     }
 
     @Override

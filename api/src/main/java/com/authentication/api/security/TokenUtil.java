@@ -1,5 +1,6 @@
 package com.authentication.api.security;
 
+import com.authentication.api.constant.SecurityConstants;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -13,38 +14,31 @@ import java.util.Map;
 
 @Component
 public class TokenUtil {
+    private final SecurityConstants securityConstants;
 
-    @Value("${auth.sub}")
-    private final String CLAIMS_SUBJECT = "sub";
-
-    @Value("${auth.create}")
-    private final String CLAIMS_CREATE = "created";
-
-    @Value("${auth.expiration}")
-    private Long TOKEN_VALIDITY = 604800L;
-
-    @Value("${auth.secret}")
-    private String TOKEN_Secret;
+    public TokenUtil(SecurityConstants securityConstants) {
+        this.securityConstants = securityConstants;
+    }
 
     public String generateToken(UserDetails userDetails) {
 
         Map<String, Object> claims = new HashMap<>();
-        claims.put(CLAIMS_SUBJECT, userDetails.getUsername());
-        claims.put(CLAIMS_CREATE, new Date());
+        claims.put(securityConstants.getSub(), userDetails.getUsername());
+        claims.put(securityConstants.getCreate(), new Date());
         return Jwts.builder()
                 .setClaims(claims)
                 .setExpiration(generateExpirationDate())
-                .signWith(SignatureAlgorithm.HS512, TOKEN_Secret)
+                .signWith(SignatureAlgorithm.HS512, securityConstants.getTokenSecret())
                 .compact();
     }
 
     public String getUserNameFromToken(String token) {
         try {
             Claims claims = Jwts.parser()
-                    .setSigningKey(TOKEN_Secret)
+                    .setSigningKey(securityConstants.getTokenSecret())
                     .parseClaimsJws(token)
                     .getBody();
-            return (String) claims.get(CLAIMS_SUBJECT);
+            return (String) claims.get(securityConstants.getSub());
 
         } catch(Exception e){
             return null;
@@ -52,7 +46,7 @@ public class TokenUtil {
     }
 
     private Date generateExpirationDate() {
-        return new Date(System.currentTimeMillis() + TOKEN_VALIDITY * 1000);
+        return new Date(System.currentTimeMillis() + securityConstants.getExpiration() * 1000);
     }
 
     public boolean isTokenValid(String token, UserDetails userDetails) {
@@ -64,7 +58,7 @@ public class TokenUtil {
     private boolean isTokenExpired(String token) {
         try {
             Claims claims = Jwts.parser()
-                    .setSigningKey(TOKEN_Secret)
+                    .setSigningKey(securityConstants.getTokenSecret())
                     .parseClaimsJws(token)
                     .getBody();
             Date expirationDate = claims.getExpiration();
