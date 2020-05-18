@@ -1,11 +1,10 @@
 package com.authentication.api.security;
 
 import com.authentication.api.constant.SecurityConstants;
+import com.authentication.api.entity.User;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
@@ -20,10 +19,10 @@ public class TokenUtil {
         this.securityConstants = securityConstants;
     }
 
-    public String generateToken(UserDetails userDetails) {
+    public String generateToken(User user) {
 
         Map<String, Object> claims = new HashMap<>();
-        claims.put(securityConstants.getSub(), userDetails.getUsername());
+        claims.put(securityConstants.getSub(), user.getEmail());
         claims.put(securityConstants.getCreate(), new Date());
         return Jwts.builder()
                 .setClaims(claims)
@@ -49,9 +48,9 @@ public class TokenUtil {
         return new Date(System.currentTimeMillis() + securityConstants.getExpiration() * 1000);
     }
 
-    public boolean isTokenValid(String token, UserDetails userDetails) {
+    public boolean isTokenValid(String token, User user) {
         String username = getUserNameFromToken(token);
-        return ((username.equals(userDetails.getUsername())) && !isTokenExpired(token));
+        return ((username.equals(user.getEmail())) && !isTokenExpired(token));
 
     }
 

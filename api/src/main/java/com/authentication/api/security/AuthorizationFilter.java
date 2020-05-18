@@ -1,13 +1,12 @@
 package com.authentication.api.security;
 
 import com.authentication.api.constant.SecurityConstants;
+import com.authentication.api.entity.User;
+import com.authentication.api.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.filter.OncePerRequestFilter;
 import org.apache.commons.lang3.StringUtils;
 
@@ -19,15 +18,14 @@ import java.io.IOException;
 
 public class AuthorizationFilter extends OncePerRequestFilter {
     private final SecurityConstants securityConstants;
+    private final UserRepository userRepository;
 
     @Autowired
     private TokenUtil tokenUtil;
 
-    @Autowired
-    private UserService userService;
-
-    public AuthorizationFilter(SecurityConstants securityConstants) {
+    public AuthorizationFilter(SecurityConstants securityConstants, UserRepository userRepository) {
         this.securityConstants = securityConstants;
+        this.userRepository = userRepository;
     }
 
     @Override
@@ -45,9 +43,9 @@ public class AuthorizationFilter extends OncePerRequestFilter {
         if (StringUtils.isNotEmpty(token) && token.startsWith(securityConstants.getTokenPrefix())) {
             String username = tokenUtil.getUserNameFromToken(token);
             if (StringUtils.isNotEmpty(username)) {
-                UserDetails user = userService.loadUserByUsername(username);
+                User user = userRepository.findByEmail(username);
                 if (tokenUtil.isTokenValid(token, user)) {
-                    return new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
+                    return new UsernamePasswordAuthenticationToken(user, null, null);
                 }
             }
         }

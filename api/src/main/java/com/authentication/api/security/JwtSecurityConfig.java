@@ -1,6 +1,7 @@
 package com.authentication.api.security;
 
 import com.authentication.api.constant.SecurityConstants;
+import com.authentication.api.repository.UserRepository;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
@@ -19,9 +20,11 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 @EnableGlobalMethodSecurity(securedEnabled = true)
 public class JwtSecurityConfig extends WebSecurityConfigurerAdapter {
     private final SecurityConstants securityConstants;
+    private final UserRepository userRepository;
 
-    public JwtSecurityConfig(SecurityConstants securityConstants) {
+    public JwtSecurityConfig(SecurityConstants securityConstants, UserRepository userRepository) {
         this.securityConstants = securityConstants;
+        this.userRepository = userRepository;
     }
 
     @Bean
@@ -40,7 +43,7 @@ public class JwtSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/api/public/**").permitAll()
                 .anyRequest().authenticated()
                 .and()
-                .addFilter(new AuthorizationFilter(securityConstants))
+                .addFilter(new AuthorizationFilter(securityConstants, userRepository))
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
         ;
