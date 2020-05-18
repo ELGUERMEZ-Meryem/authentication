@@ -17,11 +17,11 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Date;
 
-public class AuthorizationFilter extends OncePerRequestFilter {
+public class JwtAuthorizationFilter extends OncePerRequestFilter {
     private final SecurityConstants securityConstants;
     private final UserRepository userRepository;
 
-    public AuthorizationFilter(SecurityConstants securityConstants, UserRepository userRepository) {
+    public JwtAuthorizationFilter(SecurityConstants securityConstants, UserRepository userRepository) {
         this.securityConstants = securityConstants;
         this.userRepository = userRepository;
     }
