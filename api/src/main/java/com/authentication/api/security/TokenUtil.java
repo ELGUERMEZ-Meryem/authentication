@@ -36,7 +36,7 @@ public class TokenUtil {
         try {
             Claims claims = Jwts.parser()
                     .setSigningKey(securityConstants.getTokenSecret())
-                    .parseClaimsJws(token)
+                    .parseClaimsJws(token.replace(securityConstants.getTokenPrefix(), ""))
                     .getBody();
             return (String) claims.get(securityConstants.getSub());
 

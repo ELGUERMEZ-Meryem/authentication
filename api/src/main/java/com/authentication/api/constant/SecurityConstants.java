@@ -14,6 +14,7 @@ public class SecurityConstants {
     private String tokenSecret;
     // JWT token defaults
     private String tokenHeader;
+    private String tokenPrefix;
     private Long expiration;
     private String sub;
     private String create;
