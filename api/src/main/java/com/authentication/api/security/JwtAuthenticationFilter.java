@@ -40,7 +40,9 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
         final Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(""+request.getAttribute("email"), ""+request.getAttribute("password")));
         User user = userRepository.findByEmail(""+request.getAttribute("email"));
-        if (user.isEmpty()) {
+        System.out.println("hhhhhh"+ request.getAttribute("email"));
+        System.out.println("j"+ user);
+        if (user == null) {
             throw new BadCredentialsException("Invalid username or password");
         }
         return authentication;

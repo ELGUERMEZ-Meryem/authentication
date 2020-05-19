@@ -2,7 +2,9 @@ package com.authentication.api.security;
 
 import com.authentication.api.entity.User;
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -11,7 +13,9 @@ import java.util.Collection;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UserDetail implements UserDetails {
-    User user = new User();
+    @Getter
+    @Setter
+    private User user;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -20,12 +24,12 @@ public class UserDetail implements UserDetails {
 
     @Override
     public String getPassword() {
-        return this.user.getPassword();
+        return user.getPassword();
     }
 
     @Override
     public String getUsername() {
-        return this.user.getEmail();
+        return user.getEmail();
     }
 
     @Override
@@ -47,6 +51,5 @@ public class UserDetail implements UserDetails {
     public boolean isEnabled() {
         return true;
     }
-
 
 }
