@@ -6,8 +6,10 @@ import com.authentication.api.repository.UserRepository;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import javax.servlet.FilterChain;
@@ -17,11 +19,12 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Date;
 
-public class JwtAuthorizationFilter extends OncePerRequestFilter {
+public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
     private final SecurityConstants securityConstants;
     private final UserRepository userRepository;
 
-    public JwtAuthorizationFilter(SecurityConstants securityConstants, UserRepository userRepository) {
+    public JwtAuthorizationFilter(AuthenticationManager authenticationManager, SecurityConstants securityConstants, UserRepository userRepository) {
+        super(authenticationManager);
         this.securityConstants = securityConstants;
         this.userRepository = userRepository;
     }

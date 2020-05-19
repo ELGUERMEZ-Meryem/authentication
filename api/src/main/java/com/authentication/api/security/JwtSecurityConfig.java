@@ -19,12 +19,10 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(securedEnabled = true)
 public class JwtSecurityConfig extends WebSecurityConfigurerAdapter {
-    private final AuthenticationManager authenticationManager;
     private final SecurityConstants securityConstants;
     private final UserRepository userRepository;
 
-    public JwtSecurityConfig(AuthenticationManager authenticationManager, SecurityConstants securityConstants, UserRepository userRepository) {
-        this.authenticationManager = authenticationManager;
+    public JwtSecurityConfig(SecurityConstants securityConstants, UserRepository userRepository) {
         this.securityConstants = securityConstants;
         this.userRepository = userRepository;
     }
@@ -45,8 +43,8 @@ public class JwtSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/api/public/**").permitAll()
                 .anyRequest().authenticated()
                 .and()
-                .addFilter(new JwtAuthenticationFilter(authenticationManager, securityConstants, userRepository))
-                .addFilter(new JwtAuthorizationFilter(securityConstants, userRepository))
+                .addFilter(new JwtAuthenticationFilter(authenticationManager(), securityConstants, userRepository))
+                .addFilter(new JwtAuthorizationFilter(authenticationManager(), securityConstants, userRepository))
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
         ;
