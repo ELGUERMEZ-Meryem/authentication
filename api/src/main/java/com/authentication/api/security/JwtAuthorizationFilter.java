@@ -3,8 +3,7 @@ package com.authentication.api.security;
 import com.authentication.api.constant.SecurityConstants;
 import com.authentication.api.entity.User;
 import com.authentication.api.repository.UserRepository;
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.*;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -43,12 +42,22 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
     private UsernamePasswordAuthenticationToken getAuthentication(HttpServletRequest request) {
         final String token = request.getHeader(securityConstants.getTokenHeader());
         if (StringUtils.isNotEmpty(token) && token.startsWith(securityConstants.getTokenPrefix())) {
-            String username = getUserNameFromToken(token);
-            if (StringUtils.isNotEmpty(username)) {
-                User user = userRepository.findByEmail(username);
-                if (isTokenValid(token, user)) {
+            try {
+                String username = getUserNameFromToken(token);
+                if (StringUtils.isNotEmpty(username)) {
+                    User user = userRepository.findByEmail(username);
                     return new UsernamePasswordAuthenticationToken(user, null, null);
                 }
+            } catch (ExpiredJwtException exception) {
+                System.out.println("Expired JWT : " + exception.getMessage());
+            } catch (UnsupportedJwtException exception) {
+                System.out.println("Unsupported JWT : " + exception.getMessage());
+            } catch (MalformedJwtException exception) {
+                System.out.println("Invalid JWT : " + exception.getMessage());
+            } catch (SignatureException exception) {
+                System.out.println("Invalid signature : " + exception.getMessage());
+            } catch (IllegalArgumentException exception) {
+                System.out.println("Empty or null JWT : " + exception.getMessage());
             }
         }
         return null;

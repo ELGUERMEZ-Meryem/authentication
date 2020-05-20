@@ -19,14 +19,10 @@ public class UserDetailService implements UserDetailsService {
         this.userRepository = userRepository;
     }
 
-    @Bean
-    private PasswordEncoder passwordEncoder(){
-        return new BCryptPasswordEncoder();
-    }
-
     @Override
     public UserDetails loadUserByUsername(String username) {
         User user = userRepository.findByEmail(username);
+        System.out.println("bb "+username);
         if (user == null) {
             throw new UsernameNotFoundException(username);
         }

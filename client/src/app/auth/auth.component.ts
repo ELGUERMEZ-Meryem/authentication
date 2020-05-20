@@ -48,7 +48,7 @@ export class AuthComponent implements OnInit {
     }
     this.isLoading = true;
     if (this.isLoginMode) {
-      this.http.post(`http://localhost:8080/api/public/hey`, {
+      this.http.post(`http://localhost:8080/auth/login`, {
         email: this.f().email.value,
         password: this.f().password.value
       }, {responseType: 'text'}).pipe(
