@@ -1,6 +1,7 @@
 package com.authentication.api.service;
 
 import com.authentication.api.entity.User;
+import com.authentication.api.exception.EmailAlreadyExistException;
 import com.authentication.api.repository.UserRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -16,10 +17,9 @@ public class UserService implements IUser {
     }
 
     @Override
-    public User addUser(User user) {
-        if(userRepository.findByEmail(user.getEmail())!=null) {
-            System.out.println("email already exist");
-            return null;
+    public User addUser(User user) throws EmailAlreadyExistException {
+        if (userRepository.findByEmail(user.getEmail()) != null) {
+            throw new EmailAlreadyExistException("email already exist");
         }
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         user = userRepository.save(user);

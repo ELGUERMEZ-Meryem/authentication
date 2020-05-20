@@ -66,7 +66,7 @@ export class AuthComponent implements OnInit {
         this.error = null;
         this.loginForm.reset();
       }), catchError(err => {
-        this.error = err;
+        this.error = JSON.parse(err.error).message;
         return throwError(err);
       }), finalize(() => this.isLoading = false)).subscribe();
     }
