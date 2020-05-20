@@ -22,6 +22,10 @@ public class HelloController {
 
     @PostMapping("/signUp")
     public User singUp(@RequestBody User user) {
+        if(userRepository.findByEmail(user.getEmail())!=null) {
+            System.out.println("email already exist");
+            return null;
+        }
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         user = userRepository.save(user);
         return user;
