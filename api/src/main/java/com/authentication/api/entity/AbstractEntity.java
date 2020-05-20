@@ -9,8 +9,7 @@ import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import javax.persistence.EntityListeners;
-import javax.persistence.MappedSuperclass;
+import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
 
@@ -23,13 +22,13 @@ public class AbstractEntity<U> implements Serializable {
 
     @CreatedBy
     protected U createdBy;
-
     @CreatedDate
     protected Date creationDate;
-
     @LastModifiedBy
     protected U lastModifiedBy;
-
     @LastModifiedDate
     protected Date lastModifiedDate;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 }
