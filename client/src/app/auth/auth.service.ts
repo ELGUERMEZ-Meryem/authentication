@@ -10,7 +10,7 @@ import {environment} from "../../environments/environment";
 export class AuthService {
   user = new Subject();
   private API_AUTH_URL = 'auth/login';
-  private API_SIGN_UP_URL = 'auth/login';
+  private API_SIGN_UP_URL = 'api/public/signUp';
 
   constructor(private http: HttpClient) {
   }
