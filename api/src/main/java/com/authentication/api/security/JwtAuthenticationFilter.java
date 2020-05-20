@@ -37,12 +37,17 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
-        final Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(""+request.getAttribute("email"), ""+request.getAttribute("password")));
-        User user = userRepository.findByEmail(""+request.getAttribute("email"));
-        if (user == null) {
-            throw new BadCredentialsException("Invalid username or password");
+        try {
+            User user = new ObjectMapper().readValue(request.getInputStream(), User.class);
+            final Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(user.getEmail(), user.getPassword()));
+            User u = userRepository.findByEmail(user.getEmail());
+            if (u == null) {
+                throw new BadCredentialsException("Invalid username or password");
+            }
+            return authentication;
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
-        return authentication;
     }
 
     @Override
