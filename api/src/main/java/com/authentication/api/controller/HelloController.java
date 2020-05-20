@@ -1,8 +1,9 @@
 package com.authentication.api.controller;
 
 import com.authentication.api.entity.User;
-import com.authentication.api.repository.UserRepository;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import com.authentication.api.service.UserService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -11,23 +12,14 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/public")
 public class HelloController {
+    private final UserService userService;
 
-    private final UserRepository userRepository;
-    private final PasswordEncoder passwordEncoder;
-
-    public HelloController(UserRepository userRepository, PasswordEncoder passwordEncoder) {
-        this.userRepository = userRepository;
-        this.passwordEncoder = passwordEncoder;
+    public HelloController(UserService userService) {
+        this.userService = userService;
     }
 
     @PostMapping("/signUp")
-    public User singUp(@RequestBody User user) {
-        if(userRepository.findByEmail(user.getEmail())!=null) {
-            System.out.println("email already exist");
-            return null;
-        }
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-        user = userRepository.save(user);
-        return user;
+    public ResponseEntity<?> singUp(@RequestBody User user) {
+        return ResponseEntity.status(HttpStatus.OK).body(userService.addUser(user));
     }
 }
