@@ -17,7 +17,7 @@ export class AuthComponent implements OnInit {
   token: string = '';
   isLoading = false;
   error: null;
-  isLogin = false;
+  isLoggedIn = false;
 
   constructor(private http: HttpClient, private authService: AuthService) {
   }
@@ -28,7 +28,7 @@ export class AuthComponent implements OnInit {
       password: new FormControl('', [Validators.required, Validators.minLength(6)]),
     });
     this.authService.user.subscribe(d => {
-      this.isLogin = !!d;
+      this.isLoggedIn = !!d;
     });
     this.authService.autoLogin();
   }

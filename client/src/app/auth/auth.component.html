@@ -1,5 +1,5 @@
 <div class="row center">
-  <div class="col-xs-12 col-md-6 col-md-offset-3">
+  <div *ngIf="!isLoggedIn" class="col-xs-12 col-md-6 col-md-offset-3">
     <div *ngIf="error" class="alert alert-danger">
       <p>{{ error.message }}</p>
     </div>
@@ -38,9 +38,9 @@
           <div></div>
         </div>
       </div>
-      <div>
-        <button (click)="signOut()" *ngIf="isLogin" class="btn btn-primary" type="button">sign out</button>
-      </div>
     </form>
+  </div>
+  <div>
+    <button (click)="signOut()" *ngIf="isLoggedIn" class="btn btn-primary" type="button">sign out</button>
   </div>
 </div>
