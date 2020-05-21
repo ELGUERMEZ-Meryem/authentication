@@ -8,11 +8,9 @@ import org.springframework.context.annotation.Configuration;
 @ConfigurationProperties(prefix = "jwt")
 @Data
 public class SecurityConstants {
+    //login URL /auth/login
     private String authLoginUrl;
-    // Signing key for HS512 algorithm
-    // HS512 algorithm needs a key with size at least 512 bytes.
     private String tokenSecret;
-    // JWT token defaults
     private String tokenHeader;
     private String tokenPrefix;
     private Long expiration;

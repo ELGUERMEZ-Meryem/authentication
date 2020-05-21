@@ -74,23 +74,4 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
             return null;
         }
     }
-
-    public boolean isTokenValid(String token, User user) {
-        String username = getUserNameFromToken(token);
-        return ((username.equals(user.getEmail())) && !isTokenExpired(token));
-
-    }
-
-    private boolean isTokenExpired(String token) {
-        try {
-            Claims claims = Jwts.parser()
-                    .setSigningKey(securityConstants.getTokenSecret())
-                    .parseClaimsJws(token)
-                    .getBody();
-            Date expirationDate = claims.getExpiration();
-            return expirationDate.before(new Date());
-        } catch (Exception e) {
-            return false;
-        }
-    }
 }
