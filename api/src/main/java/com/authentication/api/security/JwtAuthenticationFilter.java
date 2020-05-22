@@ -67,6 +67,14 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         }
     }
 
+    /**
+     * Generates a JWT token containing username as subject, and token generate date as additional claims. These properties are taken from the specified
+     * User object. Tokens validity is infinite.
+     *
+     * @param email the user email for which the token will be generated
+     * @return the JWT token
+     */
+
     public String generateToken(String email) {
 
         Map<String, Object> claims = new HashMap<>();

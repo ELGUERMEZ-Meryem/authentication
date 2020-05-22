@@ -19,6 +19,11 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
+
+/**
+ * Configure Spring Security
+ */
+
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(securedEnabled = true)
 public class JwtSecurityConfig extends WebSecurityConfigurerAdapter {
@@ -32,6 +37,7 @@ public class JwtSecurityConfig extends WebSecurityConfigurerAdapter {
         this.userDetailService = userDetailService;
     }
 
+    //authenticationManager is used by our filters to authenticate users.
     @Bean
     @Override
     protected AuthenticationManager authenticationManager() throws Exception {
@@ -43,6 +49,7 @@ public class JwtSecurityConfig extends WebSecurityConfigurerAdapter {
         auth.userDetailsService(userDetailService).passwordEncoder(passwordEncoder());
     }
 
+    //Password encoder – in our case bcrypt
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
@@ -51,6 +58,17 @@ public class JwtSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
+        //We do not need csrf protection because our tokens are immune to it
+
+        // This is invoked when user tries to access a secured REST resource without supplying any credentials
+        // We should just send a 401 Unauthorized response because there is no 'login page' to redirect to
+
+        //Set which endpoints are secure and which are publicly available
+
+        //Add our 2 filters into the security context: JwtAuthenticationFilter and JwtAuthorizationFilter
+
+        //Disable session management – we don’t need sessions so this will prevent the creation of session cookies
+
         http.cors().and()
                 .csrf().disable()
                 .exceptionHandling().authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED))

@@ -62,6 +62,14 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
         return null;
     }
 
+    /**
+     * Tries to parse specified String as a JWT token. If successful, returns username.
+     * If unsuccessful (token is invalid or not containing all required user properties), simply returns null.
+     *
+     * @param token the JWT token to parse
+     * @return the username extracted from specified token or null if a token is invalid.
+     */
+
     public String getUserNameFromToken(String token) {
         try {
             Claims claims = Jwts.parser()

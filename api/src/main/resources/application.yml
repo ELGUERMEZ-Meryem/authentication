@@ -13,6 +13,7 @@ spring:
 
 jwt:
     auth_login_url: /auth/login
+#    7days
     expiration: 604800
     sub: sub
     create: created
