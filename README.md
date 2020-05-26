@@ -47,4 +47,8 @@ JWT support for Java is provided by the library JJWT so we also need to add foll
 			<scope>runtime</scope>
 		</dependency>
 
-III. 
+III. Authentication filter:
+Is used to authenticate user, it will check if username and password are correct, for that it calls Spring’s authentication manager to verify them. If they are it will generate the token and send it in  HTTP Authorization header, else it will send a 401 Unauthorized response.
+
+VI. Authorization filter:
+Is used to handle all HTTP requests that demandes authentication and checks if there is an Authorization header with the correct token. If the token is valid then the filter will add authentication data into Spring’s security context.
