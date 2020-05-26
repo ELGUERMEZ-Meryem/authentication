@@ -14,7 +14,7 @@ export class AuthComponent implements OnInit {
   isFormSubmitted = false;
   loginForm: FormGroup;
   isLoading = false;
-  error: null;
+  error = '';
   isLoggedIn = false;
 
   constructor(private authService: AuthService) {
@@ -50,25 +50,9 @@ export class AuthComponent implements OnInit {
     }
     this.isLoading = true;
     if (this.isLoginMode) {
-      this.authService.login(this.f().email.value, this.f().password.value).pipe(
-        tap(
-          data => {
-            this.error = null;
-            this.loginForm.reset();
-          }
-        ), catchError(err => {
-          this.error = err;
-          return throwError(err);
-        }), finalize(() => this.isLoading = false)
-      ).subscribe();
+      this.logIn();
     } else {
-      this.authService.signUp(this.f().email.value, this.f().password.value).pipe(tap(data => {
-        this.error = null;
-        this.loginForm.reset();
-      }), catchError(err => {
-        this.error = JSON.parse(err.error).message;
-        return throwError(err);
-      }), finalize(() => this.isLoading = false)).subscribe();
+      this.signIn();
     }
   }
 
@@ -92,4 +76,36 @@ export class AuthComponent implements OnInit {
     return result;
   }
 
+  private logIn() {
+    this.authService.login(this.f().email.value, this.f().password.value).pipe(
+      tap(
+        data => {
+          this.error = null;
+          this.loginForm.reset();
+        }
+      ), catchError(err => {
+        console.log('sss', err);
+        if (err.status === 401) {
+          this.error = 'User name or password is incorrect';
+        } else {
+          this.error = 'A problem has occurred';
+        }
+        return throwError(err);
+      }), finalize(() => this.isLoading = false)
+    ).subscribe();
+  }
+
+  private signIn() {
+    this.authService.signUp(this.f().email.value, this.f().password.value).pipe(tap(data => {
+      this.error = '';
+      this.loginForm.reset();
+    }), catchError(err => {
+      if (err.status === 400) {
+        this.error = JSON.parse(err.error).message;
+      } else {
+        this.error = 'A problem has occurred';
+      }
+      return throwError(err);
+    }), finalize(() => this.isLoading = false)).subscribe();
+  }
 }
