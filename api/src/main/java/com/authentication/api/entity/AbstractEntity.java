@@ -20,6 +20,13 @@ import java.util.Date;
 @NoArgsConstructor
 public class AbstractEntity<U> implements Serializable {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    //We provide @CreatedBy, @LastModifiedBy to capture the user who created or modified the entity
+    //As well as @CreatedDate and @LastModifiedDate to capture the point in time this happened
+    //The generic type U defines of what type the properties annotated with @CreatedBy or @LastModifiedBy have to be
     @CreatedBy
     protected U createdBy;
     @CreatedDate
@@ -28,7 +35,4 @@ public class AbstractEntity<U> implements Serializable {
     protected U lastModifiedBy;
     @LastModifiedDate
     protected Date lastModifiedDate;
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
 }

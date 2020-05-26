@@ -6,6 +6,10 @@ import com.authentication.api.repository.UserRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+/**
+ * User service
+ */
+
 @Service
 public class UserService implements IUser {
     private final UserRepository userRepository;
@@ -16,6 +20,13 @@ public class UserService implements IUser {
         this.passwordEncoder = passwordEncoder;
     }
 
+    /**
+     * Add user to database if he is not registered in it
+     *
+     * @param user data
+     * @return User
+     * @throws EmailAlreadyExistException
+     */
     @Override
     public User addUser(User user) throws EmailAlreadyExistException {
         if (userRepository.findByEmail(user.getEmail()) != null) {

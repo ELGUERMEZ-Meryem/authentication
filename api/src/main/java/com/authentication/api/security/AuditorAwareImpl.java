@@ -7,6 +7,9 @@ import org.springframework.security.core.context.SecurityContextHolder;
 
 import java.util.Optional;
 
+/**
+ * We use @CreatedBy or @LastModifiedBy so it needs to become aware of the current principal
+ */
 
 public class AuditorAwareImpl implements AuditorAware<String> {
     @Override

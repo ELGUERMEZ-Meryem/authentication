@@ -11,13 +11,14 @@ import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 @EnableJpaAuditing(auditorAwareRef = "auditorProvider")
 public class ApiApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(ApiApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(ApiApplication.class, args);
+    }
 
-	@Bean
-	AuditorAware<String> auditorProvider() {
-		return new AuditorAwareImpl();
-	}
+    //The auditing infrastructure will pick up this bean automatically and use it to determine the current user
+    @Bean
+    AuditorAware<String> auditorProvider() {
+        return new AuditorAwareImpl();
+    }
 
 }

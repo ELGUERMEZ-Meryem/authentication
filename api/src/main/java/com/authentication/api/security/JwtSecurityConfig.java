@@ -49,7 +49,7 @@ public class JwtSecurityConfig extends WebSecurityConfigurerAdapter {
         auth.userDetailsService(userDetailService).passwordEncoder(passwordEncoder());
     }
 
-    //Password encoder – in our case bcrypt
+    //Password encoder, in our case Bcrypt
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();

@@ -35,6 +35,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         setFilterProcessesUrl(securityConstants.getAuthLoginUrl());
     }
 
+    //We parse the user's credentials and issue them to the AuthenticationManager.
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
         try {
@@ -50,6 +51,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         }
     }
 
+    //This method called when a user successfully logs in. We use this method to generate a JWT for this user.
     @Override
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response,
                                             FilterChain filterChain, Authentication authentication) throws IOException {
@@ -69,7 +71,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
     /**
      * Generates a JWT token containing username as subject, and token generate date as additional claims. These properties are taken from the specified
-     * User object. Tokens validity is infinite.
+     * User object.
      *
      * @param email the user email for which the token will be generated
      * @return the JWT token
@@ -87,6 +89,11 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
                 .compact();
     }
 
+    /**
+     * Add number of days that the token is valid to today date
+     *
+     * @return expiration date
+     */
     private Date generateExpirationDate() {
         return new Date(System.currentTimeMillis() + securityConstants.getExpiration() * 1000);
     }

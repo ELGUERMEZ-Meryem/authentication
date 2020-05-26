@@ -15,6 +15,7 @@ public class UserDetailService implements UserDetailsService {
         this.userRepository = userRepository;
     }
 
+    //To help Spring Security loading user-specific data in the framework.
     @Override
     public UserDetails loadUserByUsername(String username) {
         User user = userRepository.findByEmail(username);
