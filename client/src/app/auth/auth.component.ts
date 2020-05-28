@@ -78,7 +78,7 @@ export class AuthComponent implements OnInit {
   }
 
   private logIn() {
-    this.authService.login(this.f().email.value, this.f().password.value).pipe(
+    this.authService.login(this.f().email.value, this.f().password.value, this.f().enable2fa.value).pipe(
       tap(
         data => {
           this.error = null;
