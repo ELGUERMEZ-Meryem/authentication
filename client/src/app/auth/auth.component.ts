@@ -32,6 +32,7 @@ export class AuthComponent implements OnInit {
     this.loginForm = new FormGroup({
       email: new FormControl('', [Validators.required, Validators.email]),
       password: new FormControl('', [Validators.required, Validators.minLength(6)]),
+      enable2fa: new FormControl(false, [])
     });
   }
 
