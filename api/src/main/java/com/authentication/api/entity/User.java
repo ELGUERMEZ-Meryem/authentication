@@ -8,6 +8,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
+import java.util.Date;
 
 @Entity
 @Data
@@ -21,5 +22,10 @@ public class User extends AbstractEntity<String> {
     @NotBlank
     @Column(nullable = false)
     private String password;
+
+    private Boolean is_2fa_enabled;
+    private String code_2fa;
+    private Date expire_time_2fa;
+    private String default_type_2fa;
 
 }
