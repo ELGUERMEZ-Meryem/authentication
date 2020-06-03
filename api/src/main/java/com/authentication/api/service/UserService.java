@@ -35,7 +35,7 @@ public class UserService implements IUser {
         }
 
         if (user.getIs_2fa_enabled() != null && user.getIs_2fa_enabled()) {
-            System.out.println("generate code here    "+user);
+            System.out.println("generate code here    " + user);
             user.setCode_2fa(Base32.random());
         }
         user.setPassword(passwordEncoder.encode(user.getPassword()));
