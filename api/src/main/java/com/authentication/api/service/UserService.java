@@ -3,6 +3,7 @@ package com.authentication.api.service;
 import com.authentication.api.entity.User;
 import com.authentication.api.exception.EmailAlreadyExistException;
 import com.authentication.api.repository.UserRepository;
+import org.jboss.aerogear.security.otp.Totp;
 import org.jboss.aerogear.security.otp.api.Base32;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -36,6 +37,8 @@ public class UserService implements IUser {
 
         if (user.getIs_2fa_enabled() != null && user.getIs_2fa_enabled()) {
             user.setCode_2fa(Base32.random());
+        } else {
+            user.setIsEnabled(1);
         }
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         user = userRepository.save(user);
@@ -46,6 +49,10 @@ public class UserService implements IUser {
     public User verifySecretCode(String username, String code) {
         System.out.println("hey from verification code" + code + " username " + username);
         User user = userRepository.findByEmail(username);
+        Totp totp = new Totp(user.getCode_2fa());
+        if (totp.verify(code)) {
+            user.setIsEnabled(1);
+        }
         return userRepository.save(user);
     }
 }

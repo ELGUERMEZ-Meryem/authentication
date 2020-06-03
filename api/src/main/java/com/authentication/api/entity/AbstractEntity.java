@@ -35,4 +35,6 @@ public class AbstractEntity<U> implements Serializable {
     protected U lastModifiedBy;
     @LastModifiedDate
     protected Date lastModifiedDate;
+    @Column(nullable = false, columnDefinition = "int default 0")
+    protected Integer isEnabled = 0;
 }
