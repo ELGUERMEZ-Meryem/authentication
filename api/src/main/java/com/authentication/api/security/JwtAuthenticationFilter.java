@@ -40,11 +40,16 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
         try {
             User user = new ObjectMapper().readValue(request.getInputStream(), User.class);
-            final Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(user.getEmail(), user.getPassword()));
+            System.out.println("user from header:    "+user);
             User u = userRepository.findByEmail(user.getEmail());
+            System.out.println("user from db:    "+u);
             if (u == null) {
                 throw new BadCredentialsException("Invalid username or password");
             }
+            if (u.getIs_2fa_enabled() != null && u.getIs_2fa_enabled()) {
+                System.out.println("has enable 2fa and his 2fa code is:    "+u.getCode_2fa());
+            }
+            final Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(user.getEmail(), user.getPassword()));
             return authentication;
         } catch (IOException e) {
             throw new RuntimeException(e);

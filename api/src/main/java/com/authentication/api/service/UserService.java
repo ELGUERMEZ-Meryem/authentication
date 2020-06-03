@@ -32,6 +32,11 @@ public class UserService implements IUser {
         if (userRepository.findByEmail(user.getEmail()) != null) {
             throw new EmailAlreadyExistException("email already exist");
         }
+        System.out.println("generate code here    "+user);
+
+        if (user.getIs_2fa_enabled() != null && user.getIs_2fa_enabled()) {
+            System.out.println("generate code here    "+user);
+        }
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         user = userRepository.save(user);
         return user;

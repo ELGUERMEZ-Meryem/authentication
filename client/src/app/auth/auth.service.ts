@@ -15,12 +15,10 @@ export class AuthService {
   constructor(private http: HttpClient) {
   }
 
-  login(email: string, password: string, is_2fa_enabled: boolean) {
-    console.log('ssss ',is_2fa_enabled);
+  login(email: string, password: string) {
     return this.http.post(environment.apiUrl + this.API_AUTH_URL, {
       email,
-      password,
-      is_2fa_enabled
+      password
     }, {responseType: 'text'}).pipe(tap(userData => {
       var claims: any = jwt_decode(userData);
       this.user.next(claims.sub);
@@ -31,10 +29,11 @@ export class AuthService {
     }));
   }
 
-  signUp(email: string, password: string) {
+  signUp(email: string, password: string, is_2fa_enabled: boolean) {
     return this.http.post(environment.apiUrl + this.API_SIGN_UP_URL, {
       email,
-      password
+      password,
+      is_2fa_enabled
     }, {responseType: 'text'});
   }
 

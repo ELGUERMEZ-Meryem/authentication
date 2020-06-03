@@ -78,7 +78,7 @@ export class AuthComponent implements OnInit {
   }
 
   private logIn() {
-    this.authService.login(this.f().email.value, this.f().password.value, this.f().enable2fa.value).pipe(
+    this.authService.login(this.f().email.value, this.f().password.value).pipe(
       tap(
         data => {
           this.error = null;
@@ -97,16 +97,17 @@ export class AuthComponent implements OnInit {
   }
 
   private signIn() {
-    this.authService.signUp(this.f().email.value, this.f().password.value).pipe(tap(data => {
-      this.error = '';
-      this.loginForm.reset();
-    }), catchError(err => {
-      if (err.status === 400) {
-        this.error = JSON.parse(err.error).message;
-      } else {
-        this.error = 'A problem has occurred';
-      }
-      return throwError(err);
-    }), finalize(() => this.isLoading = false)).subscribe();
+    this.authService.signUp(this.f().email.value, this.f().password.value, this.f().enable2fa.value)
+      .pipe(tap(data => {
+        this.error = '';
+        this.loginForm.reset();
+      }), catchError(err => {
+        if (err.status === 400) {
+          this.error = JSON.parse(err.error).message;
+        } else {
+          this.error = 'A problem has occurred';
+        }
+        return throwError(err);
+      }), finalize(() => this.isLoading = false)).subscribe();
   }
 }
