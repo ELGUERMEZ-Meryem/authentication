@@ -36,16 +36,15 @@ public class UserService implements IUser {
 
         if (user.getIs_2fa_enabled() != null && user.getIs_2fa_enabled()) {
             user.setCode_2fa(Base32.random());
-        } else {
-            user.setPassword(passwordEncoder.encode(user.getPassword()));
-            user = userRepository.save(user);
         }
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        user = userRepository.save(user);
         return user;
     }
 
     @Override
     public User verifySecretCode(String username, String code) {
-        System.out.println("hey from verification code"+code+" username "+username);
+        System.out.println("hey from verification code" + code + " username " + username);
         User user = userRepository.findByEmail(username);
         user.setCode_2fa(code);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
