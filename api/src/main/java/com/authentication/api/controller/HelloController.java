@@ -35,4 +35,9 @@ public class HelloController {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
         }
     }
+
+    @PostMapping("/verificationCode")
+    public void verification_code(@RequestBody User user) {
+        userService.verifySecretCode(user.getEmail(), user.getCode_2fa());
+    }
 }

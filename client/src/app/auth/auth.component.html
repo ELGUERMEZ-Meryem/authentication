@@ -1,5 +1,5 @@
 <div class="row">
-  <div *ngIf="!isLoggedIn" class="col-xs-12 col-md-6 col-md-offset-3">
+  <div *ngIf="!isLoggedIn && !verify" class="col-xs-12 col-md-6 col-md-offset-3">
     <div *ngIf="error" class="alert alert-danger">
       <p>{{ error }}</p>
     </div>
@@ -46,5 +46,33 @@
   </div>
   <div *ngIf="isLoggedIn">
     <button (click)="signOut()" class="btn btn-primary" type="button">sign out</button>
+  </div>
+  <div *ngIf="verify">
+    <form (ngSubmit)="verifyCode()" [formGroup]="verificationForm">
+      <h1>Sign Up: Setup and verify Two-Step Authentication</h1>
+
+      <p>Open or scan the following link with your Authenticator app</p>
+      <p>
+        <a [href]="qrSafeLink"><img [src]="qrCode" alt="google authenticator qr code"></a>
+      </p>
+
+      <p>Enter the 6-digit code from your authenticator app into the code field</p>
+      <div class="form-group">
+        <label>Code</label>
+        <input [formControlName]="'code'" class="form-control" id="code" type="text"/>
+        <p *ngIf="isControlHasError('code','required')" class="text-danger">
+          <small><strong>code is required</strong></small>
+        </p>
+        <p *ngIf="isControlHasError('code','minlength')" class="text-danger">
+          <small><strong>password minimum length is 6</strong></small>
+        </p>
+        <p *ngIf="isControlHasError('password','maxlength')" class="text-danger">
+          <small><strong>password maximum length is 6</strong></small>
+        </p>
+      </div>
+      <div>
+        <button class="btn btn-primary" type="submit">verify</button>
+      </div>
+    </form>
   </div>
 </div>

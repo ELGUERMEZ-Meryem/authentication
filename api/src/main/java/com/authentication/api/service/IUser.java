@@ -16,4 +16,6 @@ public interface IUser {
      * @throws EmailAlreadyExistException if he already has an account
      */
     User addUser(User user) throws EmailAlreadyExistException;
+
+    User verifySecretCode(String username, String code);
 }

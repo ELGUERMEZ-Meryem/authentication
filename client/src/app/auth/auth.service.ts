@@ -11,6 +11,7 @@ export class AuthService {
   user = new Subject();
   private API_AUTH_URL = 'auth/login';
   private API_SIGN_UP_URL = 'api/public/signUp';
+  private API_VERIFY_CODE_URL = 'api/public/verificationCode';
 
   constructor(private http: HttpClient) {
   }
@@ -34,6 +35,13 @@ export class AuthService {
       email,
       password,
       is_2fa_enabled
+    }, {responseType: 'text'});
+  }
+
+  verifyCode(email: string, code_2fa: string) {
+    return this.http.post(environment.apiUrl + this.API_VERIFY_CODE_URL, {
+      email,
+      code_2fa
     }, {responseType: 'text'});
   }
 
