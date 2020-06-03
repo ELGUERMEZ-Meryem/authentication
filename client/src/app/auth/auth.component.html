@@ -24,7 +24,7 @@
           <small><strong>password minimum length is 6</strong></small>
         </p>
       </div>
-      <div class="form-check pb-3">
+      <div *ngIf="!isLoginMode" class="form-check pb-3">
         <input type="checkbox" class="form-check-input" id="exampleCheck1" [formControlName]="'enable2fa'">
         <label class="form-check-label" for="exampleCheck1">enable 2fa authentication</label>
       </div>
