@@ -6,11 +6,13 @@ import {AuthComponent} from './auth/auth.component';
 import {ReactiveFormsModule} from "@angular/forms";
 import {HttpClientModule} from "@angular/common/http";
 import {AuthService} from "./auth/auth.service";
+import { Verify2faSecretCodeComponent } from './auth/verify2fa-secret-code/verify2fa-secret-code.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    AuthComponent
+    AuthComponent,
+    Verify2faSecretCodeComponent
   ],
   imports: [
     BrowserModule,
