@@ -87,7 +87,6 @@ export class AuthComponent implements OnInit {
           this.loginForm.reset();
         }
       ), catchError(err => {
-        console.log('sss', err);
         if (err.status === 401) {
           this.error = 'User name or password is incorrect';
         } else {

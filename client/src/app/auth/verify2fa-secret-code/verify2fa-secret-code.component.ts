@@ -1,5 +1,5 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {catchError, tap} from "rxjs/operators";
+import {catchError, finalize, tap} from "rxjs/operators";
 import {throwError} from "rxjs";
 import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {DomSanitizer, SafeResourceUrl} from "@angular/platform-browser";
@@ -16,6 +16,7 @@ export class Verify2faSecretCodeComponent implements OnInit {
   verificationForm: FormGroup;
   qrSafeLink: SafeResourceUrl;
   qrCode: string;
+  isLoading = false;
   @Input('user') user: any;
 
   constructor(private authService: AuthService, private readonly sanitizer: DomSanitizer) { }
@@ -35,12 +36,13 @@ export class Verify2faSecretCodeComponent implements OnInit {
     if (this.verificationForm.invalid) {
       return;
     }
+    this.isLoading = true;
     this.authService.verifyCode(this.user, this.verificationForm.controls.code.value).pipe(tap(data => {
       console.log('data ');
     }), catchError(err => {
       console.log('error ');
       return throwError(err);
-    })).subscribe();
+    }), finalize( () => this.isLoading = false)).subscribe();
   }
 
   generateQRUrl(username: string, code: string) {
