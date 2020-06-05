@@ -52,3 +52,7 @@ Is used to authenticate user, it will check if username and password are correct
 
 VI. Authorization filter:
 Is used to handle all HTTP requests that demandes authentication and checks if there is an Authorization header with the correct token. If the token is valid then the filter will add authentication data into Spring’s security context, else we will get HTTP 403 Forbidden response when we call secured endpoint without a valid JWT.
+
+# two-factor authentication (2fa)
+
+
