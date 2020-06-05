@@ -23,7 +23,9 @@ public class UserService implements IUser {
     }
 
     /**
-     * Add user to database if he is not registered in it
+     * Add user to database if he is not registered in it.
+     * if 2fa is Enabled we generate secret code and we set isEnabled to 0
+     * else we set isEnabled to 1
      *
      * @param user data
      * @return User
@@ -36,8 +38,11 @@ public class UserService implements IUser {
         }
 
         if (user.getIs_2fa_enabled() != null && user.getIs_2fa_enabled()) {
+            //if 2fa isEnabled, generate 2fa secret key encoded in Base32 format
+            //and isEnabled field is setting to 0 by default
             user.setCode_2fa(Base32.random());
         } else {
+            //if 2fa is not enabled we set isEnabled field to 1
             user.setIsEnabled(1);
         }
         user.setPassword(passwordEncoder.encode(user.getPassword()));
@@ -46,13 +51,17 @@ public class UserService implements IUser {
     }
 
     @Override
-    public User verifySecretCode(String username, String code) {
+    public Boolean verifySecretCode(String username, String code) {
         System.out.println("hey from verification code" + code + " username " + username);
         User user = userRepository.findByEmail(username);
+        //Get the user’s secret key from database and current time generate TOTP using mentioned algorithm.
+        //We compare this generated TOTP with the code
         Totp totp = new Totp(user.getCode_2fa());
         if (totp.verify(code)) {
             user.setIsEnabled(1);
+            userRepository.save(user);
+            return true;
         }
-        return userRepository.save(user);
+        return false;
     }
 }

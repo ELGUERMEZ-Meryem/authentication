@@ -21,7 +21,7 @@ public class HelloController {
     }
 
     /**
-     * Call userService to sign up the user if he is not registered in the database
+     * Call addUser service to sign up the user if he is not registered in the database
      * Or throw exception EmailAlreadyExistException if he already exist in the database
      *
      * @param user get user informations from front end to sign up the user if he is not in the database
@@ -36,8 +36,13 @@ public class HelloController {
         }
     }
 
+    /**
+     * Call verifySecretCode service to verify the secret code
+     *
+     * @param user get the secret code and user email
+     */
     @PostMapping("/verificationCode")
     public void verification_code(@RequestBody User user) {
-        userService.verifySecretCode(user.getEmail(), user.getCode_2fa());
+        return ResponseEntity.status(HttpStatus.OK).body(userService.verifySecretCode(user.getEmail(), user.getCode_2fa()));
     }
 }

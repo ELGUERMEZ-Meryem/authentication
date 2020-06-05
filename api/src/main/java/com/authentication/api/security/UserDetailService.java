@@ -18,6 +18,7 @@ public class UserDetailService implements UserDetailsService {
     //To help Spring Security loading user-specific data in the framework.
     @Override
     public UserDetails loadUserByUsername(String username) {
+        //authenticate users that have isEnabled field set to 1
         User user = userRepository.findByEmailAndIsEnabled(username, 1);
         if (user == null) {
             throw new UsernameNotFoundException(username);

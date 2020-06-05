@@ -84,6 +84,8 @@ public class JwtSecurityConfig extends WebSecurityConfigurerAdapter {
         ;
     }
 
+    //Bean named corsConfigurationSource. In that case,
+    //Spring will use the default CorsFilter with the custom corsConfigurationSource declared by the application.
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         final CorsConfiguration configuration = new CorsConfiguration().applyPermitDefaultValues();

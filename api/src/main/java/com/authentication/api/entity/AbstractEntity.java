@@ -35,6 +35,8 @@ public class AbstractEntity<U> implements Serializable {
     protected U lastModifiedBy;
     @LastModifiedDate
     protected Date lastModifiedDate;
+
+    //if isEnabled=0 the user account is not activated so he can not authenticate, else if isEnabled=1 the user account is activated
     @Column(nullable = false, columnDefinition = "int default 0")
     protected Integer isEnabled = 0;
 }
