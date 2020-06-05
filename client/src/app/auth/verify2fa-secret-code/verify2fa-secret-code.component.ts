@@ -37,7 +37,7 @@ export class Verify2faSecretCodeComponent implements OnInit {
       return;
     }
     this.isLoading = true;
-    this.authService.verifyCode(this.user, this.verificationForm.controls.code.value).pipe(tap(data => {
+    this.authService.verifyCode(this.user.email, this.verificationForm.controls.code.value).pipe(tap(data => {
       console.log('data ');
     }), catchError(err => {
       console.log('error ');
