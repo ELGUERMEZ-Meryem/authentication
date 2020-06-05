@@ -46,6 +46,8 @@ export class Verify2faSecretCodeComponent implements OnInit {
   }
 
   generateQRUrl(username: string, code: string) {
+    //QR code represents a link with specific format, which can be scanned and understood by Google Authenicator.
+    //To generate a QR image itself I used qrcode-generator
     const link = `otpauth://totp/${username}?secret=${code}&issuer=2fademo`;
     this.qrSafeLink = this.sanitizer.bypassSecurityTrustResourceUrl(link);
 
