@@ -55,7 +55,7 @@ export class AuthComponent implements OnInit {
     if (this.isLoginMode) {
       this.logIn();
     } else {
-      this.signIn();
+      this.signUp();
     }
   }
 
@@ -97,7 +97,7 @@ export class AuthComponent implements OnInit {
     ).subscribe();
   }
 
-  private signIn() {
+  private signUp() {
     this.authService.signUp(this.f().email.value, this.f().password.value, this.f().enable2fa.value)
       .pipe(tap(data => {
         this.error = '';
