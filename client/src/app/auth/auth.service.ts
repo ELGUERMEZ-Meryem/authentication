@@ -2,7 +2,7 @@ import {Subject} from "rxjs";
 import {Injectable} from "@angular/core";
 import {HttpClient} from "@angular/common/http";
 import * as jwt_decode from 'jwt-decode';
-import {tap} from "rxjs/operators";
+import {map, tap} from "rxjs/operators";
 import {environment} from "../../environments/environment";
 
 @Injectable()
@@ -20,13 +20,17 @@ export class AuthService {
     return this.http.post(environment.apiUrl + this.API_AUTH_URL, {
       email,
       password
-    }, {responseType: 'text'}).pipe(tap(userData => {
+    }, {responseType: 'text'}).pipe(map(userData => {
+      if(userData) {
+        return true;
+      }
       var claims: any = jwt_decode(userData);
       this.user.next(claims.sub);
       sessionStorage.setItem('username', claims.sub);
       sessionStorage.setItem('expirationDate', claims.exp);
       let tokenStr = 'Bearer ' + userData;
       sessionStorage.setItem('token', tokenStr);
+      return userData;
     }));
   }
 

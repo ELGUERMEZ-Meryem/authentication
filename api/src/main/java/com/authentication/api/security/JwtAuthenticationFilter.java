@@ -77,6 +77,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response, AuthenticationException failed) throws IOException, ServletException {
         if (failed instanceof InsufficientAuthenticationException) {
             response.setStatus(HttpServletResponse.SC_ACCEPTED);
+            response.getWriter().write(new ObjectMapper().writeValueAsString(true));
         } else {
             super.unsuccessfulAuthentication(request, response, failed);
         }
