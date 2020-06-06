@@ -7,12 +7,14 @@ import {ReactiveFormsModule} from "@angular/forms";
 import {HttpClientModule} from "@angular/common/http";
 import {AuthService} from "./auth/auth.service";
 import { Verify2faSecretCodeComponent } from './auth/verify2fa-secret-code/verify2fa-secret-code.component';
+import { VerifySecretKeyAfterLoginComponent } from './auth/verify-secret-key-after-login/verify-secret-key-after-login.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     AuthComponent,
-    Verify2faSecretCodeComponent
+    Verify2faSecretCodeComponent,
+    VerifySecretKeyAfterLoginComponent
   ],
   imports: [
     BrowserModule,
