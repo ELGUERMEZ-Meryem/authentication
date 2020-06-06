@@ -42,7 +42,7 @@ public class HelloController {
      * @param user get the secret code and user email
      */
     @PostMapping("/verificationCode")
-    public void verification_code(@RequestBody User user) {
+    public ResponseEntity<?> verification_code(@RequestBody User user) {
         return ResponseEntity.status(HttpStatus.OK).body(userService.verifySecretCode(user.getEmail(), user.getCode_2fa()));
     }
 }
