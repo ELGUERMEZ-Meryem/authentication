@@ -46,6 +46,7 @@ public class HelloController {
         if (userService.verifySecretCode(user.getEmail(), user.getCode_2fa())) {
             return ResponseEntity.status(HttpStatus.OK).body(true);
         }
+        //if the verification code is not correct we send a bad request
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("verification code that you enter is not correct, please try again");
     }
 }

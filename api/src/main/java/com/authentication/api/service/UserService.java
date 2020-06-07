@@ -55,6 +55,7 @@ public class UserService implements IUser {
         System.out.println("hey from verification code" + code + " username " + username);
         User user = userRepository.findByEmail(username);
         //Get the user’s secret key from database and current time generate TOTP using mentioned algorithm.
+        //the code has to be can parsed to long 
         //We compare this generated TOTP with the code
         Totp totp = new Totp(user.getCode_2fa());
         if (isValid(code) && totp.verify(code)) {
@@ -65,6 +66,12 @@ public class UserService implements IUser {
         return false;
     }
 
+    /**
+     * check if we can parse the code to long
+     *
+     * @param code to parse
+     * @return true if the code has successfully parsed to long, false if he failed and throw NumberFormatException
+     */
     private Boolean isValid(String code) {
         try {
             Long.parseLong(code);
