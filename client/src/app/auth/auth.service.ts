@@ -34,11 +34,11 @@ export class AuthService {
     }));
   }
 
-  signUp(email: string, password: string, code_2fa: boolean) {
+  signUp(email: string, password: string, is_2fa_enabled: boolean) {
     return this.http.post(environment.apiUrl + this.API_SIGN_UP_URL, {
       email,
       password,
-      code_2fa
+      is_2fa_enabled
     }, {responseType: 'text'});
   }
 
