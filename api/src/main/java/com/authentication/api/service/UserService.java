@@ -57,11 +57,20 @@ public class UserService implements IUser {
         //Get the user’s secret key from database and current time generate TOTP using mentioned algorithm.
         //We compare this generated TOTP with the code
         Totp totp = new Totp(user.getCode_2fa());
-        if (totp.verify(code)) {
+        if (isValid(code) && totp.verify(code)) {
             user.setIsEnabled(1);
             userRepository.save(user);
             return true;
         }
         return false;
+    }
+
+    private Boolean isValid(String code) {
+        try {
+            Long.parseLong(code);
+        } catch (NumberFormatException e) {
+            return false;
+        }
+        return true;
     }
 }
