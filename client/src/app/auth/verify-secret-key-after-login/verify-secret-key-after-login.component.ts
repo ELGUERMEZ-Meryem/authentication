@@ -37,7 +37,7 @@ export class VerifySecretKeyAfterLoginComponent implements OnInit {
     }
     this.isLoading = true;
     this.authService.loginWithVerification(this.email, this.password, this.verificationForm.controls.code.value).pipe(tap(data => {
-      console.log('emmmmmmmm  ', data);
+      console.log('data  ', data);
     }), catchError(err => {
       console.log('error ');
       return throwError(err);

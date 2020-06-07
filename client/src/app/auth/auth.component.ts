@@ -86,7 +86,7 @@ export class AuthComponent implements OnInit {
     this.authService.login(this.f().email.value, this.f().password.value).pipe(
       tap(
         data => {
-          if(data) {
+          if (data) {
             this.isEnabled2fa = true;
             this.email = this.f().email.value;
             this.password = this.f().password.value;

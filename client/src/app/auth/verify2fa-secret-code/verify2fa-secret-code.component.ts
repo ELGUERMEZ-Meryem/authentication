@@ -20,7 +20,8 @@ export class Verify2faSecretCodeComponent implements OnInit {
   @Input('user') user: any;
   private error: string;
 
-  constructor(private authService: AuthService, private readonly sanitizer: DomSanitizer) { }
+  constructor(private authService: AuthService, private readonly sanitizer: DomSanitizer) {
+  }
 
   ngOnInit() {
     this.initVerificationForm();
@@ -41,13 +42,13 @@ export class Verify2faSecretCodeComponent implements OnInit {
     this.authService.verifyCode(this.user.email, this.verificationForm.controls.code.value).pipe(tap(data => {
       this.error = null;
     }), catchError(err => {
-      if(err.status === 400) {
+      if (err.status === 400) {
         this.error = err.error;
-      }else {
+      } else {
         this.error = 'A problem has occurred';
       }
       return throwError(err);
-    }), finalize( () => this.isLoading = false)).subscribe();
+    }), finalize(() => this.isLoading = false)).subscribe();
   }
 
   generateQRUrl(username: string, code: string) {
@@ -55,7 +56,6 @@ export class Verify2faSecretCodeComponent implements OnInit {
     //To generate a QR image itself I used qrcode-generator
     const link = `otpauth://totp/${username}?secret=${code}&issuer=2fademo`;
     this.qrSafeLink = this.sanitizer.bypassSecurityTrustResourceUrl(link);
-
     const qrAdmin = qrcode(0, 'L');
     qrAdmin.addData(link);
     qrAdmin.make();
