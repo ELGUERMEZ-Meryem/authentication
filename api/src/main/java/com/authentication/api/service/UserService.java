@@ -33,7 +33,6 @@ public class UserService implements IUser {
      */
     @Override
     public User addUser(User user) throws EmailAlreadyExistException {
-        System.out.println("hhhdhdhhd "+ user);
         if (userRepository.findByEmail(user.getEmail()) != null) {
             throw new EmailAlreadyExistException("email already exist");
         }
@@ -41,11 +40,9 @@ public class UserService implements IUser {
         if (user.getIs_2fa_enabled() != null && user.getIs_2fa_enabled()) {
             //if 2fa isEnabled, generate 2fa secret key encoded in Base32 format
             //and isEnabled field is setting to 0 by default
-            System.out.println("zzzzzzzz ");
             user.setCode_2fa(Base32.random());
         } else {
             //if 2fa is not enabled we set isEnabled field to 1
-            System.out.println("aaaaaaa ");
             user.setIsEnabled(1);
         }
         user.setPassword(passwordEncoder.encode(user.getPassword()));
