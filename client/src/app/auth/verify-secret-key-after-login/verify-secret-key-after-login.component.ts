@@ -13,13 +13,16 @@ export class VerifySecretKeyAfterLoginComponent implements OnInit {
 
   verificationForm: FormGroup;
   isLoading = false;
-  @Input('user') user: any;
+  @Input('password') password: any;
+  @Input('email') email: any;
 
   constructor(private authService: AuthService) {
   }
 
   ngOnInit() {
     this.initVerificationForm();
+    console.log('hahhahaha password ', this.password)
+    console.log('hahhahaha email ', this.email)
   }
 
   initVerificationForm() {
@@ -33,8 +36,8 @@ export class VerifySecretKeyAfterLoginComponent implements OnInit {
       return;
     }
     this.isLoading = true;
-    this.authService.verifyCode(this.user.email, this.verificationForm.controls.code.value).pipe(tap(data => {
-      console.log('data ');
+    this.authService.loginWithVerification(this.email, this.password, this.verificationForm.controls.code.value).pipe(tap(data => {
+      console.log('emmmmmmmm  ', data);
     }), catchError(err => {
       console.log('error ');
       return throwError(err);

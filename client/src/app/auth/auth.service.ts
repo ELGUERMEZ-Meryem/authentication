@@ -2,7 +2,7 @@ import {Subject} from "rxjs";
 import {Injectable} from "@angular/core";
 import {HttpClient} from "@angular/common/http";
 import * as jwt_decode from 'jwt-decode';
-import {map, tap} from "rxjs/operators";
+import {map} from "rxjs/operators";
 import {environment} from "../../environments/environment";
 
 @Injectable()
@@ -21,7 +21,7 @@ export class AuthService {
       email,
       password
     }, {responseType: 'text'}).pipe(map(userData => {
-      if(userData) {
+      if (userData) {
         return true;
       }
       var claims: any = jwt_decode(userData);
@@ -34,11 +34,11 @@ export class AuthService {
     }));
   }
 
-  signUp(email: string, password: string, is_2fa_enabled: boolean) {
+  signUp(email: string, password: string, code_2fa: boolean) {
     return this.http.post(environment.apiUrl + this.API_SIGN_UP_URL, {
       email,
       password,
-      is_2fa_enabled
+      code_2fa
     }, {responseType: 'text'});
   }
 
@@ -66,5 +66,13 @@ export class AuthService {
     sessionStorage.removeItem('expirationDate');
     sessionStorage.removeItem('token');
     this.user.next(null);
+  }
+
+  loginWithVerification(email: any, password: any, code_2fa: any) {
+    return this.http.post(environment.apiUrl + this.API_AUTH_URL, {
+      email,
+      password,
+      code_2fa
+    }, {responseType: 'text'});
   }
 }

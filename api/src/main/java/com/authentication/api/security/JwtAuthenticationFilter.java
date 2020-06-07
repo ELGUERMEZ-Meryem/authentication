@@ -47,13 +47,11 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
             }
             //if 2fa is enabled we have to verify the secret code to authenticate the user
             if (u.getIs_2fa_enabled() != null && u.getIs_2fa_enabled()) {
-                System.out.println("has enable 2fa, and the user should enter 2fa code so he has send another request with 2fa code and his 2fa code is:    "+u.getCode_2fa());
-                if(user.getIs_2fa_enabled() == null) {
+                if(user.getCode_2fa() == null) {
                     throw new InsufficientAuthenticationException("Verification code needed");
                 }
                 Totp totp = new Totp(u.getCode_2fa());
                 if (!totp.verify(u.getCode_2fa())) {
-                    System.out.println("has enable 2fa, and the user should enter 2fa code so he has send another request with 2fa code and his 2fa code is:    "+u.getCode_2fa());
                     throw new BadCredentialsException("Invalid secret key");
                 }
             }

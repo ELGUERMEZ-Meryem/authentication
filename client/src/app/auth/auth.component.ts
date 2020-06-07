@@ -18,6 +18,9 @@ export class AuthComponent implements OnInit {
   isLoggedIn = false;
   verify: boolean = false;
   userToSend: string = '';
+  isEnabled2fa: boolean = false;
+  email: string;
+  password: string;
 
   constructor(private authService: AuthService) {
   }
@@ -83,6 +86,11 @@ export class AuthComponent implements OnInit {
     this.authService.login(this.f().email.value, this.f().password.value).pipe(
       tap(
         data => {
+          if(data) {
+            this.isEnabled2fa = true;
+            this.email = this.f().email.value;
+            this.password = this.f().password.value;
+          }
           this.error = null;
           this.loginForm.reset();
         }
