@@ -18,6 +18,7 @@ export class Verify2faSecretCodeComponent implements OnInit {
   qrCode: string;
   isLoading = false;
   @Input('user') user: any;
+  private error: string;
 
   constructor(private authService: AuthService, private readonly sanitizer: DomSanitizer) { }
 
@@ -38,9 +39,13 @@ export class Verify2faSecretCodeComponent implements OnInit {
     }
     this.isLoading = true;
     this.authService.verifyCode(this.user.email, this.verificationForm.controls.code.value).pipe(tap(data => {
-      console.log('data ');
+      this.error = null;
     }), catchError(err => {
-      console.log('error ');
+      if(err.status === 400) {
+        this.error = err.error;
+      }else {
+        this.error = 'A problem has occurred';
+      }
       return throwError(err);
     }), finalize( () => this.isLoading = false)).subscribe();
   }

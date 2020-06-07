@@ -43,6 +43,9 @@ public class HelloController {
      */
     @PostMapping("/verificationCode")
     public ResponseEntity<?> verification_code(@RequestBody User user) {
-        return ResponseEntity.status(HttpStatus.OK).body(userService.verifySecretCode(user.getEmail(), user.getCode_2fa()));
+        if(userService.verifySecretCode(user.getEmail(), user.getCode_2fa())){
+            return ResponseEntity.status(HttpStatus.OK).body(true);
+        }
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("verification code that you enter is not correct, please try again");
     }
 }
