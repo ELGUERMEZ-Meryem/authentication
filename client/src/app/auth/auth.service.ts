@@ -22,7 +22,7 @@ export class AuthService {
       password
     }, {responseType: 'text'}).pipe(map(userData => {
       if (userData === "true") {
-        return true;
+        return "true";
       }
       var claims: any = jwt_decode(userData);
       this.user.next(claims.sub);

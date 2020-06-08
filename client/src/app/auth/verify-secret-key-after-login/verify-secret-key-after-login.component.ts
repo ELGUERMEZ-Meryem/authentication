@@ -21,8 +21,6 @@ export class VerifySecretKeyAfterLoginComponent implements OnInit {
 
   ngOnInit() {
     this.initVerificationForm();
-    console.log('hahhahaha password ', this.password)
-    console.log('hahhahaha email ', this.email)
   }
 
   initVerificationForm() {
