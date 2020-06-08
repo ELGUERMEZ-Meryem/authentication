@@ -77,7 +77,9 @@ This library provides methods for verifying TOTP codes and for generating secret
             <version>1.0.0</version>
         </dependency>
 V. Sign Up:
-When the user sign up and choose to enable 2fa he will be saved in the database with the field isEnabled set to 0 and the secret key will be generated, and he will be redirect to verification page where he will find the qr image to scann or he can enter the secret key using the Google authenticator on his phone, so he had to enter the 6-digit code from his authenticator app and our backend will verify those 6-digit if all is fine we will activate his account by setting the field isEnabled to 1.
+When the user sign up and choose to enable 2fa he will be saved in the database with the field isEnabled set to 0 and the secret key will be generated, and he will be redirect to activation account page where he will find the qr image to scann or he can enter the secret key using the Google authenticator on his phone, so he had to enter the 6-digit code from his authenticator app and our backend will verify those 6-digit if all is fine we will activate his account by setting the field isEnabled to 1.
+
 VI. Log In:
+When the user enter his email and password, we check if his account is active(field isEnabled=1)if it is not activated we redirect him to activation account page to activate his account, else if the account is activated then the authenticationManager will check if the email and password is correct if it is we will check if the user has enabled 2fa if he had we will redirect him to verification page to verify his secret key.
 
 
