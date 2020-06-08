@@ -21,7 +21,7 @@ export class AuthService {
       email,
       password
     }, {responseType: 'text'}).pipe(map(userData => {
-      if (userData) {
+      if (userData === "true") {
         return true;
       }
       var claims: any = jwt_decode(userData);
