@@ -6,7 +6,7 @@ import {AuthComponent} from './auth/auth.component';
 import {ReactiveFormsModule} from "@angular/forms";
 import {HttpClientModule} from "@angular/common/http";
 import {AuthService} from "./auth/auth.service";
-import { ActivateAccountComponent } from './auth/verify2fa-secret-code/activate-account.component';
+import { ActivateAccountComponent } from './auth/activate-account/activate-account.component';
 import { VerifySecretKeyAfterLoginComponent } from './auth/verify-secret-key-after-login/verify-secret-key-after-login.component';
 
 @NgModule({
