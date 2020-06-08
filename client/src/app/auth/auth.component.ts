@@ -35,8 +35,8 @@ export class AuthComponent implements OnInit {
 
   initLoginForm() {
     this.loginForm = new FormGroup({
-      email: new FormControl('', [Validators.required, Validators.email]),
-      password: new FormControl('', [Validators.required, Validators.minLength(6)]),
+      email: new FormControl('a@a', [Validators.required, Validators.email]),
+      password: new FormControl('111111', [Validators.required, Validators.minLength(6)]),
       enable2fa: new FormControl(false, [])
     });
   }
@@ -90,6 +90,8 @@ export class AuthComponent implements OnInit {
             this.isEnabled2fa = true;
             this.email = this.f().email.value;
             this.password = this.f().password.value;
+          } else if (data === "false") {
+            console.log("activaaaaate")
           }
           this.error = null;
           this.loginForm.reset();
@@ -110,7 +112,7 @@ export class AuthComponent implements OnInit {
       .pipe(tap(data => {
         this.error = '';
         this.loginForm.reset();
-        if (JSON.parse(data).is_2fa_enabled) {
+        if (JSON.parse(data).isEnabled2fa) {
           this.verify = true;
           this.userToSend = JSON.parse(data);
         }

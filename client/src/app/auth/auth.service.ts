@@ -1,4 +1,4 @@
-import {Subject} from "rxjs";
+import {Observable, Subject} from "rxjs";
 import {Injectable} from "@angular/core";
 import {HttpClient} from "@angular/common/http";
 import * as jwt_decode from 'jwt-decode';
@@ -6,7 +6,6 @@ import {map} from "rxjs/operators";
 import {environment} from "../../environments/environment";
 
 @Injectable()
-
 export class AuthService {
   user = new Subject();
   private API_AUTH_URL = 'auth/login';
@@ -20,9 +19,13 @@ export class AuthService {
     return this.http.post(environment.apiUrl + this.API_AUTH_URL, {
       email,
       password
-    }, {responseType: 'text'}).pipe(map(userData => {
+    }).pipe(map(userData => {
+      console.log('aajjajaj ', userData, ' jj ', userData['isNotEnabled'])
       if (userData === "true") {
         return "true";
+      } else if (userData['isNotEnabled']) {
+        console.log('false ')
+        return "false";
       }
       var claims: any = jwt_decode(userData);
       this.user.next(claims.sub);
