@@ -48,7 +48,7 @@
     <button (click)="signOut()" class="btn btn-primary" type="button">sign out</button>
   </div>
   <div *ngIf="verify">
-    <app-verify2fa-secret-code [user]="userToSend"></app-verify2fa-secret-code>
+    <app-activate-account [user]="userToSend"></app-activate-account>
   </div>
   <div *ngIf="isEnabled2fa">
     <app-verify-secret-key-after-login [email]="email"

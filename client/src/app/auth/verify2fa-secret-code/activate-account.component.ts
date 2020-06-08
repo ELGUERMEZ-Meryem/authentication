@@ -7,11 +7,11 @@ import * as qrcode from "qrcode-generator";
 import {AuthService} from "../auth.service";
 
 @Component({
-  selector: 'app-verify2fa-secret-code',
-  templateUrl: './verify2fa-secret-code.component.html',
-  styleUrls: ['./verify2fa-secret-code.component.css']
+  selector: 'app-activate-account',
+  templateUrl: './activate-account.component.html',
+  styleUrls: ['./activate-account.component.css']
 })
-export class Verify2faSecretCodeComponent implements OnInit {
+export class ActivateAccountComponent implements OnInit {
 
   verificationForm: FormGroup;
   qrSafeLink: SafeResourceUrl;
