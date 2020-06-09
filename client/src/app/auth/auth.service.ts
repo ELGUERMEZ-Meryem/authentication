@@ -38,14 +38,14 @@ export class AuthService {
       email,
       password,
       is_2fa_enabled
-    }, {responseType: 'text'});
+    });
   }
 
   verifyCode(email: string, code_2fa: string) {
     return this.http.post(environment.apiUrl + this.API_VERIFY_CODE_URL, {
       email,
       code_2fa
-    }, {responseType: 'text'});
+    });
   }
 
   autoLogin() {
