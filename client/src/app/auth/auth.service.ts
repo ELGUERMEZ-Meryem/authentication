@@ -2,7 +2,7 @@ import {Observable, Subject} from "rxjs";
 import {Injectable} from "@angular/core";
 import {HttpClient} from "@angular/common/http";
 import * as jwt_decode from 'jwt-decode';
-import {map} from "rxjs/operators";
+import {map, tap} from "rxjs/operators";
 import {environment} from "../../environments/environment";
 
 @Injectable()
@@ -72,6 +72,13 @@ export class AuthService {
       email,
       password,
       code_2fa
-    }, {responseType: 'text'});
+    }).pipe(tap(userData => {
+      var claims: any = jwt_decode(userData);
+      this.user.next(claims.sub);
+      sessionStorage.setItem('username', claims.sub);
+      sessionStorage.setItem('expirationDate', claims.exp);
+      let tokenStr = 'Bearer ' + userData;
+      sessionStorage.setItem('token', tokenStr);
+    }));
   }
 }

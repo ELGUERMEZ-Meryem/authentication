@@ -13,6 +13,7 @@ export class VerifySecretKeyAfterLoginComponent implements OnInit {
 
   verificationForm: FormGroup;
   isLoading = false;
+  error = '';
   @Input('password') password: any;
   @Input('email') email: any;
 
@@ -35,10 +36,13 @@ export class VerifySecretKeyAfterLoginComponent implements OnInit {
     }
     this.isLoading = true;
     this.authService.loginWithVerification(this.email, this.password, this.verificationForm.controls.code.value).pipe(tap(data => {
-      console.log('data  ', data);
+      console.log('authentication with success  ');
     }), catchError(err => {
-      console.log('error ');
-      return throwError(err);
+      if (err.status === 401) {
+        this.error = 'User name or password is incorrect';
+      } else {
+        this.error = 'A problem has occurred';
+      }      return throwError(err);
     }), finalize(() => this.isLoading = false)).subscribe();
   }
 
