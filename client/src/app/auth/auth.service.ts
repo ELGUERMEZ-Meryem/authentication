@@ -20,12 +20,8 @@ export class AuthService {
       email,
       password
     }).pipe(map(userData => {
-      console.log('aajjajaj ', userData, ' jj ', userData['isNotEnabled'])
-      if (userData === "true") {
-        return "true";
-      } else if (userData['isNotEnabled']) {
-        console.log('false ')
-        return "false";
+      if ((userData['enabled2fa'] != null && userData['enabled2fa']) || ( userData['notEnabled'] != null && userData['notEnabled'])) {
+        return userData;
       }
       var claims: any = jwt_decode(userData);
       this.user.next(claims.sub);

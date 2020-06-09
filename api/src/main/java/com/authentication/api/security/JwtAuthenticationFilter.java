@@ -2,6 +2,7 @@ package com.authentication.api.security;
 
 import com.authentication.api.constant.SecurityConstants;
 import com.authentication.api.entity.User;
+import com.authentication.api.model.Response;
 import com.authentication.api.repository.UserRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.Jwts;
@@ -43,18 +44,14 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
             User user = new ObjectMapper().readValue(request.getInputStream(), User.class);
             //authenticationManager check if the user and password are correct
             final Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(user.getEmail(), user.getPassword()));
-            System.out.println("hahhahahhah");
             User u = userRepository.findByEmail(user.getEmail());
-            System.out.println("kkkkkk");
             if (u == null) {
                 throw new BadCredentialsException("Invalid username or password");
             }
             if (u.getIsEnabled() == 0) {
-                System.out.println("jjsjjsjjsjsjsjsjs ");
                 //the user did not send the secret key so we have to ask him for secret key
                 throw new InsufficientAuthenticationException("you should enable your account");
             }
-            System.out.println("ssssss ");
             //if 2fa is enabled we have to verify the secret code to authenticate the user
             if (u.getIs_2fa_enabled() != null && u.getIs_2fa_enabled()) {
                 if (user.getCode_2fa() == null) {
@@ -87,19 +84,16 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     //This method called when a user is not logged in
     @Override
     protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response, AuthenticationException failed) throws IOException, ServletException {
-        System.out.println("mmmmmmm ");
         if (failed instanceof InsufficientAuthenticationException) {
-            if(failed.getMessage().equals("you should enable your account")){
-                System.out.println("enable ");
-                response.getWriter().write(new ObjectMapper().writeValueAsString("{isNotEnabled: true}"));
-            }
-            System.out.println("ppppp "+failed.getMessage());
-            //user is not logged in because he missed a necessary field to authenticate, in our case he did not enter 2fa secret key
-            response.setStatus(HttpServletResponse.SC_ACCEPTED);
             //we send HTTP response with status accepted 202 and the body contain the value true that means the user has enabled 2fa so he most enter 2fa secret code
-
+            response.setStatus(HttpServletResponse.SC_ACCEPTED);
+            //user is not logged in because he missed a necessary field to authenticate, in our case he did not enter 2fa secret key or the account should be activated
+            if(failed.getMessage().equals("you should enable your account")){
+                response.getWriter().write(new ObjectMapper().writeValueAsString(Response.builder().isNotEnabled(true).build()));
+            } else {
+                response.getWriter().write(new ObjectMapper().writeValueAsString(Response.builder().isEnabled2fa(true).build()));
+            }
         } else {
-            System.out.println("aaaa ");
             //user is not logged in because he enter bad credentials
             super.unsuccessfulAuthentication(request, response, failed);
         }

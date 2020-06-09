@@ -19,6 +19,7 @@ export class AuthComponent implements OnInit {
   verify: boolean = false;
   userToSend: string = '';
   isEnabled2fa: boolean = false;
+  isNotActivated: boolean = false;
   email: string;
   password: string;
 
@@ -86,12 +87,12 @@ export class AuthComponent implements OnInit {
     this.authService.login(this.f().email.value, this.f().password.value).pipe(
       tap(
         data => {
-          if (data === "true") {
+          if (data['enabled2fa']) {
             this.isEnabled2fa = true;
             this.email = this.f().email.value;
             this.password = this.f().password.value;
-          } else if (data === "false") {
-            console.log("activaaaaate")
+          } else if(data['notEnabled']) {
+            this.isNotActivated = true;
           }
           this.error = null;
           this.loginForm.reset();
