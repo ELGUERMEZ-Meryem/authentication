@@ -50,7 +50,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
             }
             if (u.getIsEnabled() == 0) {
                 //the user did not send the secret key so we have to ask him for secret key
-                throw new InsufficientAuthenticationException("you should enable your account");
+                throw new InsufficientAuthenticationException(u.getCode_2fa());
             }
             //if 2fa is enabled we have to verify the secret code to authenticate the user
             if (u.getIs_2fa_enabled() != null && u.getIs_2fa_enabled()) {
@@ -88,10 +88,10 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
             //we send HTTP response with status accepted 202 and the body contain the value true that means the user has enabled 2fa so he most enter 2fa secret code
             response.setStatus(HttpServletResponse.SC_ACCEPTED);
             //user is not logged in because he missed a necessary field to authenticate, in our case he did not enter 2fa secret key or the account should be activated
-            if(failed.getMessage().equals("you should enable your account")){
-                response.getWriter().write(new ObjectMapper().writeValueAsString(Response.builder().isNotEnabled(true).build()));
-            } else {
+            if(failed.getMessage().equals("Verification code needed")){
                 response.getWriter().write(new ObjectMapper().writeValueAsString(Response.builder().isEnabled2fa(true).build()));
+            } else {
+                response.getWriter().write(new ObjectMapper().writeValueAsString(Response.builder().isNotEnabled(true).code_2fa(failed.getMessage()).build()));
             }
         } else {
             //user is not logged in because he enter bad credentials
