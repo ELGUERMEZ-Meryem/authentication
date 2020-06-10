@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {catchError, finalize, tap} from "rxjs/operators";
 import {throwError} from "rxjs";
 import {FormControl, FormGroup, Validators} from "@angular/forms";
@@ -18,6 +18,7 @@ export class ActivateAccountComponent implements OnInit {
   qrCode: string;
   isLoading = false;
   @Input('user') user: any;
+  @Output() isActivated = new EventEmitter<boolean>();
   private error: string;
 
   constructor(private authService: AuthService, private readonly sanitizer: DomSanitizer) {
@@ -40,6 +41,8 @@ export class ActivateAccountComponent implements OnInit {
     }
     this.isLoading = true;
     this.authService.verifyCode(this.user.email, this.verificationForm.controls.code.value).pipe(tap(data => {
+      //we should return to log in page by setting isNotActivated to false
+      this.isActivated.emit(true);
       this.error = null;
     }), catchError(err => {
       if (err.status === 400) {

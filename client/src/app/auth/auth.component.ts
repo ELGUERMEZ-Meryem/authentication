@@ -17,7 +17,7 @@ export class AuthComponent implements OnInit {
   error = '';
   isLoggedIn = false;
   verify: boolean = false;
-  userToSend: string = '';
+  userToSend: any;
   isEnabled2fa: boolean = false;
   isNotActivated: boolean = false;
   email: string;
@@ -84,6 +84,10 @@ export class AuthComponent implements OnInit {
     return result;
   }
 
+  isActivated(event: boolean) {
+    this.isNotActivated = false;
+  }
+
   private logIn() {
     this.authService.login(this.f().email.value, this.f().password.value).pipe(
       tap(
@@ -92,7 +96,7 @@ export class AuthComponent implements OnInit {
             this.isEnabled2fa = true;
             this.email = this.f().email.value;
             this.password = this.f().password.value;
-          } else if(data['notEnabled']) {
+          } else if (data['notEnabled']) {
             this.isNotActivated = true;
             this.userToActivate = {
               code_2fa: data['code_2fa'],
@@ -118,9 +122,9 @@ export class AuthComponent implements OnInit {
       .pipe(tap(data => {
         this.error = '';
         this.loginForm.reset();
-        if (JSON.parse(data).isEnabled2fa) {
+        if (data['is_2fa_enabled']) {
           this.verify = true;
-          this.userToSend = JSON.parse(data);
+          this.userToSend = data;
         }
       }), catchError(err => {
         if (err.status === 400) {

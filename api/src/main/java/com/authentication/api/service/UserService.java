@@ -52,7 +52,6 @@ public class UserService implements IUser {
 
     @Override
     public Boolean verifySecretCode(String username, String code) {
-        System.out.println("hey from verification code" + code + " username " + username);
         User user = userRepository.findByEmail(username);
         //Get the user’s secret key from database and current time generate TOTP using mentioned algorithm.
         //the code has to be can parsed to long 

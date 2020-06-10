@@ -1,8 +1,8 @@
 spring:
     datasource:
-        url: jdbc:mysql://findl.dynu.net:3306/dac6_meryeme
-        username: dac6.api
-        password: 4{UWzFX7r5!f<YSG
+        url: jdbc:mysql://localhost:3306/authentication
+        username: root
+        password: rootroot
     jpa:
         show-sql: true
         properties:

@@ -48,13 +48,13 @@
     <button (click)="signOut()" class="btn btn-primary" type="button">sign out</button>
   </div>
   <div *ngIf="verify">
-    <app-activate-account [user]="userToSend"></app-activate-account>
+    <app-activate-account [user]="userToSend" (isActivated)="isActivated($event)"></app-activate-account>
   </div>
   <div *ngIf="isEnabled2fa">
     <app-verify-secret-key-after-login [email]="email"
                                        [password]="password"></app-verify-secret-key-after-login>
   </div>
   <div *ngIf="isNotActivated">
-    <app-activate-account [user]="userToSend"></app-activate-account>
+    <app-activate-account [user]="userToActivate" (isActivated)="isActivated($event)"></app-activate-account>
   </div>
 </div>
