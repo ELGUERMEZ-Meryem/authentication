@@ -1,5 +1,6 @@
 package com.authentication.api.entity;
 
+import com.authentication.api.enums.TwofaTypes;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -30,6 +31,6 @@ public class User extends AbstractEntity<String> {
     private Boolean is_2fa_enabled;
     private String code_2fa;
     private Date expire_time_2fa;
-    private String default_type_2fa;
+    private TwofaTypes default_type_2fa;
 
 }

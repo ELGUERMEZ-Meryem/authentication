@@ -33,6 +33,7 @@ public class UserService implements IUser {
      */
     @Override
     public User addUser(User user) throws EmailAlreadyExistException {
+        System.out.println("jsshshhs "+ user);
         if (userRepository.findByEmail(user.getEmail()) != null) {
             throw new EmailAlreadyExistException("email already exist");
         }

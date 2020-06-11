@@ -24,9 +24,29 @@
           <small><strong>password minimum length is 6</strong></small>
         </span>
       </div>
+      <div class="form-group">
+        <label>Phone number</label>
+        <input [formControlName]="'phoneNumber'" class="form-control" id="phoneNumber" type="text"/>
+        <span *ngIf="isControlHasError('phoneNumber','required')" class="text-danger">
+          <small><strong>Phone number is required</strong></small>
+        </span>
+      </div>
       <div *ngIf="!isLoginMode" class="form-check pb-3">
-        <input [formControlName]="'enable2fa'" class="form-check-input" id="exampleCheck1" type="checkbox">
-        <label class="form-check-label" for="exampleCheck1">enable 2fa authentication</label>
+        <div>
+          <input [formControlName]="'enable2fa'" class="form-check-input" id="exampleCheck1" type="checkbox">
+          <label class="form-check-label" for="exampleCheck1">enable 2fa authentication</label>
+        </div>
+        <div *ngIf="f().enable2fa.value">
+          <label class="form-check-label">choose seconde factor: </label>
+          <label style="margin-left: 1rem">
+            <input type="radio" value="GoogleAuth" formControlName="type_2fa">
+            <span>  Google authenticator</span>
+          </label>
+          <label style="margin-left: 1rem">
+            <input type="radio" value="SMS" formControlName="type_2fa">
+            <span>  sms</span>
+          </label>
+        </div>
       </div>
       <div>
         <button class="btn btn-primary" type="submit">{{isLoginMode ? 'login' : 'Sign up'}}</button>

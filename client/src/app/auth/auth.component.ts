@@ -39,7 +39,9 @@ export class AuthComponent implements OnInit {
     this.loginForm = new FormGroup({
       email: new FormControl('a@a', [Validators.required, Validators.email]),
       password: new FormControl('111111', [Validators.required, Validators.minLength(6)]),
-      enable2fa: new FormControl(false, [])
+      phoneNumber: new FormControl('', [Validators.required]),
+      enable2fa: new FormControl(false, []),
+      type_2fa: new FormControl("GoogleAuth", [])
     });
   }
 
@@ -118,7 +120,7 @@ export class AuthComponent implements OnInit {
   }
 
   private signUp() {
-    this.authService.signUp(this.f().email.value, this.f().password.value, this.f().enable2fa.value)
+    this.authService.signUp(this.f().email.value, this.f().password.value, this.f().phoneNumber.value, this.f().enable2fa.value, this.f().type_2fa.value)
       .pipe(tap(data => {
         this.error = '';
         this.loginForm.reset();
