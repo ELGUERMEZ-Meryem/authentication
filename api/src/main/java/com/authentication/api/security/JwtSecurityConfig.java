@@ -2,6 +2,7 @@ package com.authentication.api.security;
 
 import com.authentication.api.constant.SecurityConstants;
 import com.authentication.api.repository.UserRepository;
+import com.authentication.api.service.TwilioService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
@@ -30,11 +31,13 @@ public class JwtSecurityConfig extends WebSecurityConfigurerAdapter {
     private final SecurityConstants securityConstants;
     private final UserRepository userRepository;
     private final UserDetailService userDetailService;
+    private final TwilioService twilioService;
 
-    public JwtSecurityConfig(SecurityConstants securityConstants, UserRepository userRepository, UserDetailService userDetailService) {
+    public JwtSecurityConfig(SecurityConstants securityConstants, UserRepository userRepository, UserDetailService userDetailService, TwilioService twilioService) {
         this.securityConstants = securityConstants;
         this.userRepository = userRepository;
         this.userDetailService = userDetailService;
+        this.twilioService = twilioService;
     }
 
     //authenticationManager is used by our filters to authenticate users.
@@ -77,7 +80,7 @@ public class JwtSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/api/public/**").permitAll()
                 .anyRequest().authenticated()
                 .and()
-                .addFilter(new JwtAuthenticationFilter(authenticationManager(), securityConstants, userRepository))
+                .addFilter(new JwtAuthenticationFilter(authenticationManager(), securityConstants, userRepository, twilioService))
                 .addFilter(new JwtAuthorizationFilter(authenticationManager(), securityConstants, userRepository))
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)

@@ -2,8 +2,10 @@ package com.authentication.api.security;
 
 import com.authentication.api.constant.SecurityConstants;
 import com.authentication.api.entity.User;
+import com.authentication.api.enums.TwofaTypes;
 import com.authentication.api.model.Response;
 import com.authentication.api.repository.UserRepository;
+import com.authentication.api.service.TwilioService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -24,16 +26,19 @@ import java.io.IOException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 
 public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
     private final AuthenticationManager authenticationManager;
     private final SecurityConstants securityConstants;
     private final UserRepository userRepository;
+    private final TwilioService twilioService;
 
-    public JwtAuthenticationFilter(AuthenticationManager authenticationManager, SecurityConstants securityConstants, UserRepository userRepository) {
+    public JwtAuthenticationFilter(AuthenticationManager authenticationManager, SecurityConstants securityConstants, UserRepository userRepository, TwilioService twilioService) {
         this.authenticationManager = authenticationManager;
         this.securityConstants = securityConstants;
         this.userRepository = userRepository;
+        this.twilioService = twilioService;
         setFilterProcessesUrl(securityConstants.getAuthLoginUrl());
     }
 
@@ -54,14 +59,24 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
             }
             //if 2fa is enabled we have to verify the secret code to authenticate the user
             if (u.getIs_2fa_enabled() != null && u.getIs_2fa_enabled()) {
-                if (user.getCode_2fa() == null) {
+                if (u.getDefault_type_2fa().equals(TwofaTypes.GoogleAuth) && user.getCode_2fa() == null) {
                     //the user did not send the secret key so we have to ask him for secret key
                     throw new InsufficientAuthenticationException("Verification code needed");
+                } else if (u.getDefault_type_2fa().equals(TwofaTypes.sms)) {
+                    Random rand = new Random();
+                    twilioService.initTwilio();
+                    // Generate random integers in range 0 to 999999
+                    int ra = rand.nextInt(1000000);
+                    System.out.println("the verification code is sended");
+                    twilioService.SendSMS(u.getPhoneNumber(), ""+ra);
+                    u.setCode_2fa(""+ra);
                 }
-                Totp totp = new Totp(u.getCode_2fa());
-                //verify if the code that we got can't be parsed to long or if the code is not correct
-                if (!isValid(user.getCode_2fa()) || !totp.verify(user.getCode_2fa())) {
-                    throw new BadCredentialsException("Invalid secret key");
+                else if (u.getDefault_type_2fa().equals(TwofaTypes.GoogleAuth)) {
+                    Totp totp = new Totp(u.getCode_2fa());
+                    //verify if the code that we got can't be parsed to long or if the code is not correct
+                    if (!isValid(user.getCode_2fa()) || !totp.verify(user.getCode_2fa())) {
+                        throw new BadCredentialsException("Invalid secret key");
+                    }
                 }
                 //here all went good so the verification code that the user enter is correct and he can be authenticated
                 //or he has not enabled 2fa authentication so he authenticated oly by email and password
