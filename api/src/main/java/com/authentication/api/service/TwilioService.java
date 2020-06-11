@@ -5,7 +5,9 @@ import com.twilio.Twilio;
 import com.twilio.rest.api.v2010.account.Message;
 import com.twilio.rest.api.v2010.account.MessageCreator;
 import com.twilio.type.PhoneNumber;
+import org.springframework.stereotype.Service;
 
+@Service
 public class TwilioService implements ITwilio {
     private final TwilioConstants twilioConstants;
 
@@ -14,15 +16,16 @@ public class TwilioService implements ITwilio {
     }
 
     @Override
-    public void initTwilio(String accountSID, String authToken) {
+    public void initTwilio() {
         Twilio.init(twilioConstants.getAccountSid(), twilioConstants.getAuthToken());
     }
 
     @Override
-    public boolean SendSMS(String toNumber, String message) {
+    public boolean SendSMS(String toNumber, int ra) {
         if(isPhoneNumber(toNumber)){
             PhoneNumber to = new PhoneNumber(toNumber);
             PhoneNumber from = new PhoneNumber(twilioConstants.getTrialNumber());
+            String message = "Hey, your verification code is: "+ra;
             MessageCreator creator = Message.creator(to, from, message);
             creator.create();
             return true;
@@ -32,7 +35,8 @@ public class TwilioService implements ITwilio {
     }
 
     private boolean isPhoneNumber(String toNumber) {
-        String regexPattern = "\\+\\d(-\\d{3}){2}-\\d{4}";
-        return toNumber.matches(regexPattern);
+        //String regexPattern = "\\+\\d(-\\d{3}){2}-\\d{4}";
+        //return toNumber.matches(regexPattern);
+        return true;
     }
 }

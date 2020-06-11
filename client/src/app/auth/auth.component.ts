@@ -130,7 +130,8 @@ export class AuthComponent implements OnInit {
         }
       }), catchError(err => {
         if (err.status === 400) {
-          this.error = JSON.parse(err.error).message;
+          console.log("jjjsjsjjs ", err)
+          this.error = err.error.message;
         } else {
           this.error = 'A problem has occurred';
         }

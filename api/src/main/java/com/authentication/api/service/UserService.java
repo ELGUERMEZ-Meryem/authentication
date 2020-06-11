@@ -1,6 +1,7 @@
 package com.authentication.api.service;
 
 import com.authentication.api.entity.User;
+import com.authentication.api.enums.TwofaTypes;
 import com.authentication.api.exception.EmailAlreadyExistException;
 import com.authentication.api.repository.UserRepository;
 import org.jboss.aerogear.security.otp.Totp;
@@ -33,15 +34,18 @@ public class UserService implements IUser {
      */
     @Override
     public User addUser(User user) throws EmailAlreadyExistException {
-        System.out.println("jsshshhs "+ user);
         if (userRepository.findByEmail(user.getEmail()) != null) {
             throw new EmailAlreadyExistException("email already exist");
         }
 
         if (user.getIs_2fa_enabled() != null && user.getIs_2fa_enabled()) {
-            //if 2fa isEnabled, generate 2fa secret key encoded in Base32 format
-            //and isEnabled field is setting to 0 by default
-            user.setCode_2fa(Base32.random());
+            if (user.getDefault_type_2fa().equals(TwofaTypes.GoogleAuth)) {
+                //if 2fa isEnabled, generate 2fa secret key encoded in Base32 format
+                //and isEnabled field is setting to 0 by default
+                user.setCode_2fa(Base32.random());
+            } else {
+                user.setIsEnabled(1);
+            }
         } else {
             //if 2fa is not enabled we set isEnabled field to 1
             user.setIsEnabled(1);
