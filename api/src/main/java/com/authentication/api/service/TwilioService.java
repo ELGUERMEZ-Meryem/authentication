@@ -28,7 +28,6 @@ public class TwilioService implements ITwilio {
             return true;
         } else {
             throw new IllegalArgumentException("Phone number["+ toNumber + "] is not a valid number");
-            return false;
         }
     }
 

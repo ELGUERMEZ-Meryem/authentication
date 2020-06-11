@@ -23,6 +23,10 @@ public class User extends AbstractEntity<String> {
     @Column(nullable = false)
     private String password;
 
+    @Email
+    @Column(nullable = false, unique = true)
+    private String phoneNumber;
+
     private Boolean is_2fa_enabled;
     private String code_2fa;
     private Date expire_time_2fa;
