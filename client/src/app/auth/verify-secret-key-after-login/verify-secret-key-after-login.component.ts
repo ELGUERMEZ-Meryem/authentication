@@ -42,7 +42,7 @@ export class VerifySecretKeyAfterLoginComponent implements OnInit {
       console.log('authentication with success  ');
     }), catchError(err => {
       if (err.status === 401) {
-        this.error = 'User name or password is incorrect';
+        this.error = 'The verification code is not correct!';
       } else {
         this.error = 'A problem has occurred';
       }      return throwError(err);
