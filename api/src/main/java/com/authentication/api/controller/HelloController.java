@@ -23,7 +23,8 @@ public class HelloController {
 
     /**
      * Call addUser service to sign up the user if he is not registered in the database
-     * Or throw exception EmailAlreadyExistException if he already exist in the database
+     * Or throw exception EmailAlreadyExistException if his email already exist in the database
+     * Or throw exception PhoneNumberAlreadyExistException if his phone number already exist in the database
      *
      * @param user get user informations from front end to sign up the user if he is not in the database
      * @return user

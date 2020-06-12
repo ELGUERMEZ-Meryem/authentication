@@ -55,34 +55,48 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
                 throw new BadCredentialsException("Invalid username or password");
             }
             if (u.getIsEnabled() == 0) {
+                //is not enabled = 0 only in the case where the user enabled 2fa Google authenticator
                 //the user did not send the secret key so we have to ask him for secret key
                 throw new InsufficientAuthenticationException(u.getCode_2fa());
             }
             //if 2fa is enabled we have to verify the secret code to authenticate the user
             if (u.getIs_2fa_enabled() != null && u.getIs_2fa_enabled()) {
+                //if user did not send 2fa code for verification
                 if (user.getCode_2fa() == null) {
-                    if (u.getDefault_type_2fa().equals(TwofaTypes.GoogleAuth)){
+                    if (u.getDefault_type_2fa().equals(TwofaTypes.GoogleAuth)) {
+                        //the user had enabled 2fa Google authenticator
                         //the user did not send the secret key so we have to ask him for secret key
                         throw new InsufficientAuthenticationException("Verification code needed");
-                    } else if (u.getDefault_type_2fa().equals(TwofaTypes.sms)){
+                    } else if (u.getDefault_type_2fa().equals(TwofaTypes.sms)) {
+                        //the user had enabled 2fa sms
+                        //we have to generate a code using Random class
                         Random rand = new Random();
+                        //initialize the Twilio account
                         twilioService.initTwilio();
                         // Generate random integers in range 000000 to 999999
                         int ra = rand.nextInt(1000000);
+                        //send the code that we generated, and set that code in 2fa code
                         twilioService.SendSMS(u.getPhoneNumber(), ra);
-                        u.setCode_2fa(""+ra);
+                        u.setCode_2fa("" + ra);
+                        //set expired date for 2fa to after now plus 5 minutes
                         u.setExpire_time_2fa(DateUtils.addMinutes(new Date(), 5));
+                        //update the user with generated 2fa code and expired date
                         userRepository.save(u);
+                        //throw exception to ask user to verify sms that he got on his phone
                         throw new InsufficientAuthenticationException("Verify sms");
                     }
                 } else {
-                    if (u.getDefault_type_2fa().equals(TwofaTypes.GoogleAuth)){
+                    //user send the code, so we have to verify it depend on 2fa type
+                    //if the type is Google authenticator so we use TOTP to verify code
+                    //else if the type is sms, we check if 2fa code has expired
+                    if (u.getDefault_type_2fa().equals(TwofaTypes.GoogleAuth)) {
                         Totp totp = new Totp(u.getCode_2fa());
                         //verify if the code that we got can't be parsed to long or if the code is not correct
                         if (!isValid(user.getCode_2fa()) || !totp.verify(user.getCode_2fa())) {
                             throw new BadCredentialsException("Invalid secret key");
                         }
-                    } else if (u.getDefault_type_2fa().equals(TwofaTypes.sms) && (!u.getCode_2fa().equals(user.getCode_2fa()) || u.getExpire_time_2fa().before(new Date())) ){
+                    } else if (u.getDefault_type_2fa().equals(TwofaTypes.sms) && (!u.getCode_2fa().equals(user.getCode_2fa()) || u.getExpire_time_2fa().before(new Date()))) {
+                        //if the code is not correct or has expired
                         throw new BadCredentialsException("Invalid secret key");
                     }
                 }
@@ -110,10 +124,10 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         if (failed instanceof InsufficientAuthenticationException) {
             //we send HTTP response with status accepted 202 and the body contain the value true that means the user has enabled 2fa so he most enter 2fa secret code
             response.setStatus(HttpServletResponse.SC_ACCEPTED);
-            //user is not logged in because he missed a necessary field to authenticate, in our case he did not enter 2fa secret key or the account should be activated
-            if(failed.getMessage().equals("Verification code needed")){
+            //user is not logged in because he missed a necessary field to authenticate, in our case he did not enter 2fa secret key or the account should be activated or 2fa key has expired
+            if (failed.getMessage().equals("Verification code needed")) {
                 response.getWriter().write(new ObjectMapper().writeValueAsString(Response.builder().isEnabled2fa(true).build()));
-            } else if (failed.getMessage().equals("Verify sms")){
+            } else if (failed.getMessage().equals("Verify sms")) {
                 response.getWriter().write(new ObjectMapper().writeValueAsString(Response.builder().isSMSCodeSanded(true).build()));
             } else {
                 response.getWriter().write(new ObjectMapper().writeValueAsString(Response.builder().isNotEnabled(true).code_2fa(failed.getMessage()).build()));

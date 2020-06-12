@@ -26,7 +26,7 @@ public class UserService implements IUser {
 
     /**
      * Add user to database if he is not registered in it.
-     * if 2fa is Enabled we generate secret code and we set isEnabled to 0
+     * if 2fa is Enabled and 2fa type is Google authenticator we generate secret code and we set isEnabled to 0
      * else we set isEnabled to 1
      *
      * @param user data
@@ -44,10 +44,11 @@ public class UserService implements IUser {
 
         if (user.getIs_2fa_enabled() != null && user.getIs_2fa_enabled()) {
             if (user.getDefault_type_2fa().equals(TwofaTypes.GoogleAuth)) {
-                //if 2fa isEnabled, generate 2fa secret key encoded in Base32 format
+                //if 2fa isEnabled and 2fa type is Google authenticator, generate 2fa secret key encoded in Base32 format
                 //and isEnabled field is setting to 0 by default
                 user.setCode_2fa(Base32.random());
             } else {
+                //if 2fa isEnabled and 2fa type is sms, we set isEnabled to 1
                 user.setIsEnabled(1);
             }
         } else {

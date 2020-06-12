@@ -10,11 +10,12 @@ import com.authentication.api.exception.PhoneNumberAlreadyExistException;
 
 public interface IUser {
     /**
-     * Add user if he is not already exist in our database
+     * Add user if his email or phine number are not already exist in our database
      *
      * @param user informations
      * @return registered user
-     * @throws EmailAlreadyExistException if he already has an account
+     * @throws EmailAlreadyExistException       if his email already exist
+     * @throws PhoneNumberAlreadyExistException if his phone number already exist
      */
     User addUser(User user) throws EmailAlreadyExistException, PhoneNumberAlreadyExistException;
 

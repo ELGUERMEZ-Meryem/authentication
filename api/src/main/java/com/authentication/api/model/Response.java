@@ -5,6 +5,9 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+/**
+ * this model help us to send a response body when the authentication is not completed
+ */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
