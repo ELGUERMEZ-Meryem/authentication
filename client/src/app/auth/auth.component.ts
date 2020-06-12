@@ -11,7 +11,6 @@ import {throwError} from "rxjs";
 })
 export class AuthComponent implements OnInit {
   isLoginMode = true;
-  isFormSubmitted = false;
   loginForm: FormGroup;
   isLoading = false;
   error = '';
@@ -55,7 +54,6 @@ export class AuthComponent implements OnInit {
   }
 
   onSubmit() {
-    this.isFormSubmitted = true;
     if (this.loginForm.invalid) {
       return;
     }
@@ -83,7 +81,7 @@ export class AuthComponent implements OnInit {
       return false;
     }
 
-    const result = control.hasError(validationType) && (control.dirty || control.touched || this.isFormSubmitted);
+    const result = control.hasError(validationType) && (control.dirty || control.touched);
     return result;
   }
 
