@@ -8,14 +8,16 @@ import {HttpClientModule} from "@angular/common/http";
 import {AuthService} from "./auth/auth.service";
 import { ActivateAccountComponent } from './auth/activate-account/activate-account.component';
 import { VerifySecretKeyAfterLoginComponent } from './auth/verify-secret-key-after-login/verify-secret-key-after-login.component';
+import {SignUpComponent} from "./auth/sign-up/sign-up.component";
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    AuthComponent,
-    ActivateAccountComponent,
-    VerifySecretKeyAfterLoginComponent
-  ],
+    declarations: [
+        AppComponent,
+        AuthComponent,
+        ActivateAccountComponent,
+        VerifySecretKeyAfterLoginComponent,
+        SignUpComponent
+    ],
   imports: [
     BrowserModule,
     ReactiveFormsModule,

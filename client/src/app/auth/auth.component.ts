@@ -15,8 +15,6 @@ export class AuthComponent implements OnInit {
   isLoading = false;
   error = '';
   isLoggedIn = false;
-  verify: boolean = false;
-  userToSend: any;
   isEnabled2fa: boolean = false;
   isNotActivated: boolean = false;
   email: string;
@@ -38,10 +36,7 @@ export class AuthComponent implements OnInit {
   initLoginForm() {
     this.loginForm = new FormGroup({
       email: new FormControl('a@a', [Validators.required, Validators.email]),
-      password: new FormControl('111111', [Validators.required, Validators.minLength(6)]),
-      phoneNumber: new FormControl('', [Validators.required]),
-      enable2fa: new FormControl(false, []),
-      type_2fa: new FormControl("GoogleAuth", [])
+      password: new FormControl('111111', [Validators.required, Validators.minLength(6)])
     });
   }
 
@@ -58,11 +53,7 @@ export class AuthComponent implements OnInit {
       return;
     }
     this.isLoading = true;
-    if (this.isLoginMode) {
       this.logIn();
-    } else {
-      this.signUp();
-    }
   }
 
   signOut() {
@@ -124,22 +115,4 @@ export class AuthComponent implements OnInit {
     ).subscribe();
   }
 
-  private signUp() {
-    this.authService.signUp(this.f().email.value, this.f().password.value, this.f().phoneNumber.value, this.f().enable2fa.value, this.f().type_2fa.value)
-      .pipe(tap(data => {
-        this.error = '';
-        this.loginForm.reset();
-        if (data['is_2fa_enabled'] && data['code_2fa'] != null) {
-          this.verify = true;
-          this.userToSend = data;
-        }
-      }), catchError(err => {
-        if (err.status === 400) {
-          this.error = err.error.message;
-        } else {
-          this.error = 'A problem has occurred';
-        }
-        return throwError(err);
-      }), finalize(() => this.isLoading = false)).subscribe();
-  }
 }
