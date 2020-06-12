@@ -89,6 +89,8 @@ export class AuthComponent implements OnInit {
 
   isActivated(event: boolean) {
     this.isNotActivated = false;
+    this.isEnabled2fa = false;
+    this.isSMSSanded = false;
   }
 
   private logIn() {
@@ -107,10 +109,8 @@ export class AuthComponent implements OnInit {
             };
           } else if (data['smscodeSanded']){
             this.isSMSSanded = true;
-            this.userToActivate = {
-              code_2fa: data['code_2fa'],
-              email: this.f().email.value
-            };
+            this.email= this.f().email.value;
+            this.password= this.f().password.value;
           }
           this.error = null;
           this.loginForm.reset();
@@ -131,13 +131,12 @@ export class AuthComponent implements OnInit {
       .pipe(tap(data => {
         this.error = '';
         this.loginForm.reset();
-        if (data['is_2fa_enabled']) {
+        if (data['is_2fa_enabled'] && data['code_2fa'] != null) {
           this.verify = true;
           this.userToSend = data;
         }
       }), catchError(err => {
         if (err.status === 400) {
-          console.log("jjjsjsjjs ", err)
           this.error = err.error.message;
         } else {
           this.error = 'A problem has occurred';

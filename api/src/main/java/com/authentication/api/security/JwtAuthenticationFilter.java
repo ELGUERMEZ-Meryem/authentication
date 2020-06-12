@@ -59,24 +59,30 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
             }
             //if 2fa is enabled we have to verify the secret code to authenticate the user
             if (u.getIs_2fa_enabled() != null && u.getIs_2fa_enabled()) {
-                if (u.getDefault_type_2fa().equals(TwofaTypes.GoogleAuth) && user.getCode_2fa() == null) {
-                    //the user did not send the secret key so we have to ask him for secret key
-                    throw new InsufficientAuthenticationException("Verification code needed");
-                } else if (u.getDefault_type_2fa().equals(TwofaTypes.sms)) {
-                    Random rand = new Random();
-                    twilioService.initTwilio();
-                    // Generate random integers in range 0 to 999999
-                    int ra = rand.nextInt(1000000);
-                    System.out.println("the verification code is sended");
-                    twilioService.SendSMS(u.getPhoneNumber(), ra);
-                    u.setCode_2fa(""+ra);
-                    throw new InsufficientAuthenticationException("Verify sms");
-                }
-                else if (u.getDefault_type_2fa().equals(TwofaTypes.GoogleAuth)) {
-                    Totp totp = new Totp(u.getCode_2fa());
-                    //verify if the code that we got can't be parsed to long or if the code is not correct
-                    if (!isValid(user.getCode_2fa()) || !totp.verify(user.getCode_2fa())) {
-                        throw new BadCredentialsException("Invalid secret key");
+                if (user.getCode_2fa() == null) {
+                    if (u.getDefault_type_2fa().equals(TwofaTypes.GoogleAuth)){
+                        //the user did not send the secret key so we have to ask him for secret key
+                        throw new InsufficientAuthenticationException("Verification code needed");
+                    } else if (u.getDefault_type_2fa().equals(TwofaTypes.sms)){
+                        Random rand = new Random();
+                        twilioService.initTwilio();
+                        // Generate random integers in range 0 to 999999
+                        int ra = rand.nextInt(1000000);
+                        System.out.println("the verification code is sended "+ ra);
+                        twilioService.SendSMS(u.getPhoneNumber(), ra);
+                        u.setCode_2fa(""+ra);
+                        userRepository.save(u);
+                        throw new InsufficientAuthenticationException("Verify sms");
+                    }
+                } else {
+                    if (u.getDefault_type_2fa().equals(TwofaTypes.GoogleAuth)){
+                        Totp totp = new Totp(u.getCode_2fa());
+                        //verify if the code that we got can't be parsed to long or if the code is not correct
+                        if (!isValid(user.getCode_2fa()) || !totp.verify(user.getCode_2fa())) {
+                            throw new BadCredentialsException("Invalid secret key");
+                        }
+                    } else if (u.getDefault_type_2fa().equals(TwofaTypes.sms) && !u.getCode_2fa().equals(user.getCode_2fa())){
+
                     }
                 }
                 //here all went good so the verification code that the user enter is correct and he can be authenticated

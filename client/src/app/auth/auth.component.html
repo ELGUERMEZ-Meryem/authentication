@@ -1,5 +1,5 @@
 <div class="row">
-  <div *ngIf="!isLoggedIn && !verify && !isEnabled2fa && !isNotActivated" class="col-xs-12 col-md-6 col-md-offset-3">
+  <div *ngIf="!isLoggedIn && !verify && !isEnabled2fa && !isNotActivated && !isSMSSanded" class="col-xs-12 col-md-6 col-md-offset-3">
     <div *ngIf="error" class="alert alert-danger">
       <p>{{ error }}</p>
     </div>
@@ -70,9 +70,9 @@
   <div *ngIf="verify">
     <app-activate-account [user]="userToSend" (isActivated)="isActivated($event)"></app-activate-account>
   </div>
-  <div *ngIf="isEnabled2fa">
+  <div *ngIf="isEnabled2fa || isSMSSanded">
     <app-verify-secret-key-after-login [email]="email"
-                                       [password]="password"></app-verify-secret-key-after-login>
+                                       [password]="password" (isActivated)="isActivated($event)"></app-verify-secret-key-after-login>
   </div>
   <div *ngIf="isNotActivated">
     <app-activate-account [user]="userToActivate" (isActivated)="isActivated($event)"></app-activate-account>

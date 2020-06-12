@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {AuthService} from "../auth.service";
 import {catchError, finalize, tap} from "rxjs/operators";
@@ -16,6 +16,7 @@ export class VerifySecretKeyAfterLoginComponent implements OnInit {
   error = '';
   @Input('password') password: any;
   @Input('email') email: any;
+  @Output() isActivated = new EventEmitter<boolean>();
 
   constructor(private authService: AuthService) {
   }
@@ -36,6 +37,8 @@ export class VerifySecretKeyAfterLoginComponent implements OnInit {
     }
     this.isLoading = true;
     this.authService.loginWithVerification(this.email, this.password, this.verificationForm.controls.code.value).pipe(tap(data => {
+      //we should return to log in page by setting isSMSSanded and isEnabled2fa to false
+      this.isActivated.emit(true);
       console.log('authentication with success  ');
     }), catchError(err => {
       if (err.status === 401) {
