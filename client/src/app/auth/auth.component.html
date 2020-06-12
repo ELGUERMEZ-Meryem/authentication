@@ -41,7 +41,7 @@
 <div *ngIf="!isLoginMode">
   <app-sign-up></app-sign-up>
 </div>
-<div *ngIf="!isLoggedIn && isEnabled2fa && !isNotActivated && !isSMSSanded" style="margin-top: 10px">
+<div *ngIf="!isLoggedIn && !isEnabled2fa && !isNotActivated && !isSMSSanded" style="margin-top: 10px">
   |
   <button (click)="onSwitchMode()" class="btn btn-primary" type="button">Switch
     to {{isLoginMode ? 'Sign up' : 'login' }}</button>

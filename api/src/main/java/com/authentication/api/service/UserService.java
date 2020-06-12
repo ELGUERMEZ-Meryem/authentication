@@ -3,6 +3,7 @@ package com.authentication.api.service;
 import com.authentication.api.entity.User;
 import com.authentication.api.enums.TwofaTypes;
 import com.authentication.api.exception.EmailAlreadyExistException;
+import com.authentication.api.exception.PhoneNumberAlreadyExistException;
 import com.authentication.api.repository.UserRepository;
 import org.jboss.aerogear.security.otp.Totp;
 import org.jboss.aerogear.security.otp.api.Base32;
@@ -33,9 +34,12 @@ public class UserService implements IUser {
      * @throws EmailAlreadyExistException
      */
     @Override
-    public User addUser(User user) throws EmailAlreadyExistException {
+    public User addUser(User user) throws EmailAlreadyExistException, PhoneNumberAlreadyExistException {
         if (userRepository.findByEmail(user.getEmail()) != null) {
             throw new EmailAlreadyExistException("email already exist");
+        }
+        if (userRepository.findByPhoneNumber(user.getPhoneNumber()) != null) {
+            throw new PhoneNumberAlreadyExistException("phone number already exist");
         }
 
         if (user.getIs_2fa_enabled() != null && user.getIs_2fa_enabled()) {

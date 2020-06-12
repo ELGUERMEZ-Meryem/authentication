@@ -2,6 +2,7 @@ package com.authentication.api.service;
 
 import com.authentication.api.entity.User;
 import com.authentication.api.exception.EmailAlreadyExistException;
+import com.authentication.api.exception.PhoneNumberAlreadyExistException;
 
 /**
  * User interface
@@ -15,7 +16,7 @@ public interface IUser {
      * @return registered user
      * @throws EmailAlreadyExistException if he already has an account
      */
-    User addUser(User user) throws EmailAlreadyExistException;
+    User addUser(User user) throws EmailAlreadyExistException, PhoneNumberAlreadyExistException;
 
     /**
      * Read the user from the database thanks to username that we get in parameter and verifies the code
