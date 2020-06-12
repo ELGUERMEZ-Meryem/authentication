@@ -23,6 +23,7 @@ export class AuthComponent implements OnInit {
   email: string;
   password: string;
   userToActivate: any;
+  isSMSSanded: boolean = false;
 
   constructor(private authService: AuthService) {
   }
@@ -100,6 +101,12 @@ export class AuthComponent implements OnInit {
             this.password = this.f().password.value;
           } else if (data['notEnabled']) {
             this.isNotActivated = true;
+            this.userToActivate = {
+              code_2fa: data['code_2fa'],
+              email: this.f().email.value
+            };
+          } else if (data['smscodeSanded']){
+            this.isSMSSanded = true;
             this.userToActivate = {
               code_2fa: data['code_2fa'],
               email: this.f().email.value

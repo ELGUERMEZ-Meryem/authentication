@@ -70,6 +70,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
                     System.out.println("the verification code is sended");
                     twilioService.SendSMS(u.getPhoneNumber(), ra);
                     u.setCode_2fa(""+ra);
+                    throw new InsufficientAuthenticationException("Verify sms");
                 }
                 else if (u.getDefault_type_2fa().equals(TwofaTypes.GoogleAuth)) {
                     Totp totp = new Totp(u.getCode_2fa());
@@ -105,6 +106,8 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
             //user is not logged in because he missed a necessary field to authenticate, in our case he did not enter 2fa secret key or the account should be activated
             if(failed.getMessage().equals("Verification code needed")){
                 response.getWriter().write(new ObjectMapper().writeValueAsString(Response.builder().isEnabled2fa(true).build()));
+            } else if (failed.getMessage().equals("Verify sms")){
+                response.getWriter().write(new ObjectMapper().writeValueAsString(Response.builder().isSMSCodeSanded(true).build()));
             } else {
                 response.getWriter().write(new ObjectMapper().writeValueAsString(Response.builder().isNotEnabled(true).code_2fa(failed.getMessage()).build()));
             }

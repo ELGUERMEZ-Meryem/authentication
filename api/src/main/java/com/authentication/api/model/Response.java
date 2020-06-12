@@ -12,5 +12,6 @@ import lombok.NoArgsConstructor;
 public class Response {
     boolean isNotEnabled;
     boolean isEnabled2fa;
+    boolean isSMSCodeSanded;
     String code_2fa;
 }

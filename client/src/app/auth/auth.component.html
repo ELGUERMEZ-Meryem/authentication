@@ -24,7 +24,7 @@
           <small><strong>password minimum length is 6</strong></small>
         </span>
       </div>
-      <div *ngIf="!isLoginMode" class="form-group">
+      <div class="form-group">
         <label>Phone number</label>
         <input [formControlName]="'phoneNumber'" class="form-control" id="phoneNumber" type="text"/>
         <span *ngIf="isControlHasError('phoneNumber','required')" class="text-danger">

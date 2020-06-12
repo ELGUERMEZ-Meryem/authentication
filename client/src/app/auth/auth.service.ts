@@ -20,7 +20,7 @@ export class AuthService {
       email,
       password
     }).pipe(map(userData => {
-      if ((userData['enabled2fa'] != null && userData['enabled2fa']) || ( userData['notEnabled'] != null && userData['notEnabled'])) {
+      if ((userData['enabled2fa'] != null && userData['enabled2fa']) || ( userData['notEnabled'] != null && userData['notEnabled']) || ( userData['smscodeSanded'] != null && userData['smscodeSanded'])) {
         return userData;
       }
       var claims: any = jwt_decode(userData);
