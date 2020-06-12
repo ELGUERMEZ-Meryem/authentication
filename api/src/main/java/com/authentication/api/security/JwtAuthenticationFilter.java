@@ -69,7 +69,6 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
                         twilioService.initTwilio();
                         // Generate random integers in range 000000 to 999999
                         int ra = rand.nextInt(1000000);
-                        System.out.println("the verification code is sended "+ ra);
                         twilioService.SendSMS(u.getPhoneNumber(), ra);
                         u.setCode_2fa(""+ra);
                         u.setExpire_time_2fa(DateUtils.addMinutes(new Date(), 5));

@@ -25,7 +25,7 @@ public class TwilioService implements ITwilio {
         if(isPhoneNumber(toNumber)){
             PhoneNumber to = new PhoneNumber(toNumber);
             PhoneNumber from = new PhoneNumber(twilioConstants.getTrialNumber());
-            String message = "Hey, your verification code is: "+ra;
+            String message = "Hey, your verification code is: "+ ra + ", this code will expired after 5 minutes";
             MessageCreator creator = Message.creator(to, from, message);
             creator.create();
             return true;
