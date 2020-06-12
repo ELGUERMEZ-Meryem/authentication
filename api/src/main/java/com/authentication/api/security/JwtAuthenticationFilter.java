@@ -82,8 +82,8 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
                         if (!isValid(user.getCode_2fa()) || !totp.verify(user.getCode_2fa())) {
                             throw new BadCredentialsException("Invalid secret key");
                         }
-                    } else if (u.getDefault_type_2fa().equals(TwofaTypes.sms) && !u.getCode_2fa().equals(user.getCode_2fa())){
-
+                    } else if (u.getDefault_type_2fa().equals(TwofaTypes.sms) && (!u.getCode_2fa().equals(user.getCode_2fa()) || u.getExpire_time_2fa().before(new Date())) ){
+                        throw new BadCredentialsException("Invalid secret key");
                     }
                 }
                 //here all went good so the verification code that the user enter is correct and he can be authenticated
