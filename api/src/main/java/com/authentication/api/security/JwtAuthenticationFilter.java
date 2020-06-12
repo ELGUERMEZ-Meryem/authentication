@@ -68,7 +68,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
                     // Generate random integers in range 0 to 999999
                     int ra = rand.nextInt(1000000);
                     System.out.println("the verification code is sended");
-                    twilioService.SendSMS(u.getPhoneNumber(), ""+ra);
+                    twilioService.SendSMS(u.getPhoneNumber(), ra);
                     u.setCode_2fa(""+ra);
                 }
                 else if (u.getDefault_type_2fa().equals(TwofaTypes.GoogleAuth)) {
