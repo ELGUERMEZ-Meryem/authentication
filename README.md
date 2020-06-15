@@ -15,25 +15,30 @@ Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxQDEiLCJjcmVhdGVkIjoxNTkwMTUyNzc3Nzk2LCJl
 So there are three parts separated with comma – header, claims, and signature. Header and payload are Base64 encoded JSON objects. We can use https://jwt.io/ to see the tree parts:
 
 1. Header: ALGORITHM & TOKEN TYPE
+
          {
+	     "typ": "JWT",
              "alg": "HS512"
          }
+	 
  2. PAYLOAD: DATA
+ 
  {
   "sub": "1@1",
   "created": 1590152777796,
   "exp": 1590757577
 }
 
+
 II. add jwt dependencies:
 
 JWT support for Java is provided by the library JJWT so we also need to add following dependencies to the pom.xml file:
 
-    <dependency>
-            <groupId>io.jsonwebtoken</groupId>
-            <artifactId>jjwt-api</artifactId>
-            <version>0.10.5</version>
-        </dependency>
+                <dependency>
+                       <groupId>io.jsonwebtoken</groupId>
+                        <artifactId>jjwt-api</artifactId>
+                        <version>0.10.5</version>
+                </dependency>
 		<dependency>
 			<groupId>io.jsonwebtoken</groupId>
 			<artifactId>jjwt-impl</artifactId>
