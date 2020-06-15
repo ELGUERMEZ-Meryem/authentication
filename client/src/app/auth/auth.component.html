@@ -27,14 +27,6 @@
       <div>
         <button class="btn btn-primary" type="submit">Login</button>
       </div>
-      <div *ngIf="isLoading" style="text-align: center">
-        <div class="lds-ring">
-          <div></div>
-          <div></div>
-          <div></div>
-          <div></div>
-        </div>
-      </div>
     </form>
   </div>
 </div>
@@ -45,6 +37,14 @@
   |
   <button (click)="onSwitchMode()" class="btn btn-primary" type="button">Switch
     to {{isLoginMode ? 'Sign up' : 'login' }}</button>
+</div>
+<div *ngIf="isLoading" style="text-align: center">
+  <div class="lds-ring">
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+  </div>
 </div>
 <div *ngIf="isLoggedIn">
   <button (click)="signOut()" class="btn btn-primary" type="button">sign out</button>
