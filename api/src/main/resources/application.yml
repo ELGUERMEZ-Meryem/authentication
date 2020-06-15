@@ -24,4 +24,4 @@ jwt:
 twilio:
     trial_number: +12016852922
     account_sid: ACc10394db5ea5bcc859dc465b70fe5b01
-    auth_token: bd5b994c6db28506c4a855cb6a2001ef
+    auth_token: 8ce090cfa850bc6af8d9fbfdf6174025

@@ -26,7 +26,8 @@
       </div>
       <div class="form-group">
         <label>Phone number</label>
-        <input [formControlName]="'phoneNumber'" class="form-control" id="phoneNumber" type="text"/>
+        <input [dropSpecialCharacters]="false" [formControlName]="'phoneNumber'" class="form-control"
+               id="phoneNumber" mask="+000000000000" type="text"/>
         <span *ngIf="isControlHasError('phoneNumber','required')" class="text-danger">
           <small><strong>Phone number is required</strong></small>
         </span>
@@ -39,11 +40,11 @@
         <div *ngIf="f().enable2fa.value">
           <label class="form-check-label">choose seconde factor: </label>
           <label style="margin-left: 1rem">
-            <input type="radio" value="GoogleAuth" formControlName="type_2fa">
+            <input formControlName="type_2fa" type="radio" value="GoogleAuth">
             <span>  Google authenticator</span>
           </label>
           <label style="margin-left: 1rem">
-            <input type="radio" value="sms" formControlName="type_2fa">
+            <input formControlName="type_2fa" type="radio" value="sms">
             <span>  sms</span>
           </label>
         </div>
@@ -62,6 +63,6 @@
     </form>
   </div>
   <div *ngIf="verify">
-    <app-activate-account [user]="userToSend" (isActivated)="isActivated($event)"></app-activate-account>
+    <app-activate-account (isActivated)="isActivated($event)" [user]="userToSend"></app-activate-account>
   </div>
 </div>

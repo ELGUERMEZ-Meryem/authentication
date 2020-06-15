@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {AuthService} from "../auth.service";
 import {catchError, finalize, tap} from "rxjs/operators";
@@ -47,7 +47,7 @@ export class SignUpComponent implements OnInit {
       return;
     }
     this.isLoading = true;
-      this.signUp();
+    this.signUp();
   }
 
   /**
@@ -64,6 +64,10 @@ export class SignUpComponent implements OnInit {
 
     const result = control.hasError(validationType) && (control.dirty || control.touched);
     return result;
+  }
+
+  isActivated(event: boolean) {
+    this.verify = false;
   }
 
   private signUp() {
@@ -83,9 +87,5 @@ export class SignUpComponent implements OnInit {
         }
         return throwError(err);
       }), finalize(() => this.isLoading = false)).subscribe();
-  }
-
-  isActivated(event: boolean) {
-    this.verify = false;
   }
 }
