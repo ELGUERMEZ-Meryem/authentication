@@ -17,7 +17,7 @@ So there are three parts separated with comma – header, claims, and signature.
 1. Header: ALGORITHM & TOKEN TYPE
 
          {
-	     "typ": "JWT",
+	         "typ": "JWT",
              "alg": "HS512"
          }
 	 
