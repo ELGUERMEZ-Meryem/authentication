@@ -3,6 +3,7 @@ package com.authentication.api.controller;
 import com.authentication.api.entity.User;
 import com.authentication.api.exception.EmailAlreadyExistException;
 import com.authentication.api.exception.PhoneNumberAlreadyExistException;
+import com.authentication.api.exception.PhoneNumberNotValidException;
 import com.authentication.api.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -33,7 +34,7 @@ public class HelloController {
     public ResponseEntity<?> singUp(@RequestBody User user) {
         try {
             return ResponseEntity.status(HttpStatus.CREATED).body(userService.addUser(user));
-        } catch (EmailAlreadyExistException | PhoneNumberAlreadyExistException e) {
+        } catch (EmailAlreadyExistException | PhoneNumberAlreadyExistException | PhoneNumberNotValidException e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
         }
     }

@@ -4,7 +4,10 @@ import com.authentication.api.entity.User;
 import com.authentication.api.enums.TwofaTypes;
 import com.authentication.api.exception.EmailAlreadyExistException;
 import com.authentication.api.exception.PhoneNumberAlreadyExistException;
+import com.authentication.api.exception.PhoneNumberNotValidException;
 import com.authentication.api.repository.UserRepository;
+import com.twilio.exception.ApiException;
+import com.twilio.rest.lookups.v1.PhoneNumber;
 import org.jboss.aerogear.security.otp.Totp;
 import org.jboss.aerogear.security.otp.api.Base32;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -18,10 +21,12 @@ import org.springframework.stereotype.Service;
 public class UserService implements IUser {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final TwilioService twilioService;
 
-    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder, TwilioService twilioService) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
+        this.twilioService = twilioService;
     }
 
     /**
@@ -32,15 +37,22 @@ public class UserService implements IUser {
      * @param user data
      * @return User
      * @throws EmailAlreadyExistException
+     * @throws PhoneNumberAlreadyExistException
+     * @throws PhoneNumberNotValidException
      */
     @Override
-    public User addUser(User user) throws EmailAlreadyExistException, PhoneNumberAlreadyExistException {
+    public User addUser(User user) throws EmailAlreadyExistException, PhoneNumberAlreadyExistException, PhoneNumberNotValidException {
         if (userRepository.findByEmail(user.getEmail()) != null) {
             throw new EmailAlreadyExistException("email already exist");
         }
         if (userRepository.findByPhoneNumber(user.getPhoneNumber()) != null) {
             throw new PhoneNumberAlreadyExistException("phone number already exist");
         }
+        //check if phone number is a valid number
+        if (!isPhoneNumberValid(user.getPhoneNumber())) {
+            throw new PhoneNumberNotValidException("Phone number[" + user.getPhoneNumber() + "] is not a valid number");
+        }
+
 
         if (user.getIs_2fa_enabled() != null && user.getIs_2fa_enabled()) {
             if (user.getDefault_type_2fa().equals(TwofaTypes.GoogleAuth)) {
@@ -88,5 +100,21 @@ public class UserService implements IUser {
             return false;
         }
         return true;
+    }
+
+    /**
+     * check if the number is a valid number
+     *
+     * @param toNumber number that we need to check
+     * @return true if the number is valid
+     */
+    private boolean isPhoneNumberValid(String toNumber) {
+        try {
+            twilioService.initTwilio();
+            PhoneNumber.fetcher(new com.twilio.type.PhoneNumber(toNumber)).fetch();
+            return true;
+        } catch (ApiException e) {
+            return false;
+        }
     }
 }

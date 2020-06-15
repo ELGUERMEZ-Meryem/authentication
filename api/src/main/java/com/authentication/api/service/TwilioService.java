@@ -26,30 +26,13 @@ public class TwilioService implements ITwilio {
 
     @Override
     public boolean SendSMS(String toNumber, int ra) {
-        //check if phone number is a valid number
-        if (isPhoneNumber(toNumber)) {
-            PhoneNumber to = new PhoneNumber(toNumber);
-            PhoneNumber from = new PhoneNumber(twilioConstants.getTrialNumber());
-            String message = "Hey, your verification code is: " + ra + ", this code will expired after 5 minutes";
-            //create the message
-            MessageCreator creator = Message.creator(to, from, message);
-            //send the message
-            creator.create();
-            return true;
-        } else {
-            throw new IllegalArgumentException("Phone number[" + toNumber + "] is not a valid number");
-        }
-    }
-
-    /**
-     * check if the number is a valid number
-     *
-     * @param toNumber number that we need to check
-     * @return true if the number is valid
-     */
-    private boolean isPhoneNumber(String toNumber) {
-        //String regexPattern = "\\+\\d(-\\d{3}){2}-\\d{4}";
-        //return toNumber.matches(regexPattern);
+        PhoneNumber to = new PhoneNumber(toNumber);
+        PhoneNumber from = new PhoneNumber(twilioConstants.getTrialNumber());
+        String message = "Hey, your verification code is: " + ra + ", this code will expired after 5 minutes";
+        //create the message
+        MessageCreator creator = Message.creator(to, from, message);
+        //send the message
+        creator.create();
         return true;
     }
 }
