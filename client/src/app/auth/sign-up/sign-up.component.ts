@@ -71,7 +71,11 @@ export class SignUpComponent implements OnInit {
   }
 
   private signUp() {
-    this.authService.signUp(this.f().email.value, this.f().password.value, this.f().phoneNumber.value, this.f().enable2fa.value, this.f().type_2fa.value)
+    let type_2fa = this.f().type_2fa.value;
+    if(!this.f().enable2fa.value){
+      type_2fa = null;
+    }
+    this.authService.signUp(this.f().email.value, this.f().password.value, this.f().phoneNumber.value, this.f().enable2fa.value, type_2fa)
       .pipe(tap(data => {
         this.error = '';
         this.signUpForm.reset();
