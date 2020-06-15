@@ -9,7 +9,11 @@ import {AuthService} from "./auth/auth.service";
 import { ActivateAccountComponent } from './auth/activate-account/activate-account.component';
 import { VerifySecretKeyAfterLoginComponent } from './auth/verify-secret-key-after-login/verify-secret-key-after-login.component';
 import {SignUpComponent} from "./auth/sign-up/sign-up.component";
+import {IConfig, NgxMaskModule} from "ngx-mask";
 
+const maskConfig: Partial<IConfig> = {
+  validation: false,
+};
 @NgModule({
     declarations: [
         AppComponent,
@@ -22,6 +26,7 @@ import {SignUpComponent} from "./auth/sign-up/sign-up.component";
     BrowserModule,
     ReactiveFormsModule,
     HttpClientModule,
+    NgxMaskModule.forRoot(maskConfig),
   ],
   providers: [AuthService],
   bootstrap: [AppComponent]
