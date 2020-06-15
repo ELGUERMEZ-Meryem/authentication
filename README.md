@@ -23,11 +23,11 @@ So there are three parts separated with comma – header, claims, and signature.
 	 
  2. PAYLOAD: DATA
  
- {
-  "sub": "1@1",
-  "created": 1590152777796,
-  "exp": 1590757577
-}
+            {
+        "sub": "1@1",
+        "created": 1590152777796,
+        "exp": 1590757577
+             }
 
 
 II. add jwt dependencies:
