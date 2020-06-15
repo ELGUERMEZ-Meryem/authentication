@@ -35,7 +35,7 @@ II. add jwt dependencies:
 JWT support for Java is provided by the library JJWT so we also need to add following dependencies to the pom.xml file:
 
             <dependency>
-                   <groupId>io.jsonwebtoken</groupId>
+                    <groupId>io.jsonwebtoken</groupId>
                     <artifactId>jjwt-api</artifactId>
                     <version>0.10.5</version>
             </dependency>
